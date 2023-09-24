@@ -1,0 +1,2 @@
+class MaintenanceStaffsController < ApplicationController
+end

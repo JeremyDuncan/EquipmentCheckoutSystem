@@ -1,0 +1,2 @@
+class HrStaffsController < ApplicationController
+end
