@@ -1,0 +1,5 @@
+h1 All Reports
+
+ul
+  - @reports.each do |report|
+    li= link_to report.name, report_path(report)

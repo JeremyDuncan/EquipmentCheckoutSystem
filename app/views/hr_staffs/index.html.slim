@@ -1,0 +1,5 @@
+h1 All HR Staff
+
+ul
+  - @hr_staffs.each do |staff|
+    li= link_to staff.name, hr_staff_path(staff)

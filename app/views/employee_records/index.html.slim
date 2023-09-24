@@ -1,0 +1,5 @@
+h1 All Employee Records
+
+ul
+  - @employee_records.each do |employee_record|
+    li= link_to employee_record.name, employee_record_path(employee_record)
