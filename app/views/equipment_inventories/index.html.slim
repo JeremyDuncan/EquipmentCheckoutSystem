@@ -1,0 +1,5 @@
+h1 All Equipment
+
+ul
+  - @equipment_inventories.each do |equipment|
+    li= link_to equipment.name, equipment_inventory_path(equipment)
