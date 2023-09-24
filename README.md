@@ -4,7 +4,7 @@
 
 * Configuration (TODO)
 
-* Database PostgresQL
+* Database PostgreSQL
 
 ---
 # CEIS400-Group-4
