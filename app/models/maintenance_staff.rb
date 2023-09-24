@@ -1,4 +1,5 @@
 class MaintenanceStaff < ApplicationRecord
+  has_many :equipment_inventories
 
   #TODO=> SETUP METHODS
   def full_name
