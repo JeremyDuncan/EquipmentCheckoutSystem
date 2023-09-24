@@ -4,7 +4,8 @@ class ReportsController < ApplicationController
   end
 
   def generate
-    #TODO
+    @report = Report.find(params[:id])
+    @report.generate
   end
 
 end

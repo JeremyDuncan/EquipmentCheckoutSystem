@@ -13,4 +13,19 @@ class EquipmentInventory < ApplicationRecord
   def check_out
     #TODO
   end
+  # ========================
+  # Updates equipment status
+  # ------------------------
+  def update_equipment_status
+    # Your logic here
+  end
+
+  # ===========================
+  # Records equipment condition
+  # ---------------------------
+  def record_equipment_condition
+    # Your logic here
+  end
+
+
 end
