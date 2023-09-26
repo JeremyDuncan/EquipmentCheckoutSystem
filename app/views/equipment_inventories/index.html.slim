@@ -1,5 +1,34 @@
-h1 All Equipment
+h1 Equipment Inventory
 
-ul
-  - @equipment_inventories.each do |equipment|
-    li= link_to equipment.name, equipment_inventory_path(equipment)
+= link_to 'Add Equipment', new_equipment_inventory_path
+
+table
+  thead
+    tr
+      th Equipment Name
+      th Equipment ID
+      th Status
+      th Actions
+  tbody
+    - @equipment_inventories.each do |equipment|
+      tr
+        td = equipment.equipment_name
+        td = equipment.equipment_id
+        td = equipment.status
+        td
+          = link_to 'View', equipment_inventory_path(equipment)
+          = link_to 'Edit', edit_equipment_inventory_path(equipment)
+          = link_to 'Update Status', '#'
+          = button_to 'Delete', equipment_inventory_path(equipment), 
+                                method: :delete, 
+                                class: 'delete-button', 
+                                id: "delete-button-#{equipment.id}"
+      
+javascript:
+  $(document).ready(function () {
+    $('.delete-button').click(function (e) {
+      if (!window.confirm('Are you sure?')) {
+        e.preventDefault();
+      }
+    });
+  });

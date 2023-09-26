@@ -1,0 +1,13 @@
+h1 Edit Equipment
+
+= form_with(model: @equipment_inventory, local: true) do |f|
+  = f.label :equipment_name
+  = f.text_field :equipment_name
+
+  = f.label :equipment_id
+  = f.text_field :equipment_id
+
+  = f.label :status
+  = f.number_field :status
+
+  = f.submit 'Update Equipment'

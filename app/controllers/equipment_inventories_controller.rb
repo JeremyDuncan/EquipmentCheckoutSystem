@@ -1,8 +1,39 @@
 class EquipmentInventoriesController < ApplicationController
-
   def index
     @equipment_inventories = EquipmentInventory.all
   end
+  
+  # =======================================================
+  # Initialize a new EquipmentInventory object for the form
+  # -------------------------------------------------------
+  def new
+    @equipment_inventory = EquipmentInventory.new
+  end
+  def create
+    @equipment_inventory = EquipmentInventory.new(equipment_inventory_params)
+    if @equipment_inventory.save
+      redirect_to equipment_inventories_path, notice: 'Equipment was successfully added.'
+    else
+      render :new
+    end
+  end
+  
+  def edit
+    @equipment_inventory = EquipmentInventory.find(params[:id])
+  end
+  
+  def update
+    @equipment_inventory = EquipmentInventory.find(params[:id])
+    if @equipment_inventory.update(equipment_inventory_params)
+      redirect_to equipment_inventories_path, notice: 'Equipment was successfully updated.'
+    else
+      render :edit
+    end
+  end
+  def show
+    @equipment_inventory = EquipmentInventory.find(params[:id])
+  end
+  
   # Custom method to update equipment status
   def update_equipment_status
     @equipment_inventory = EquipmentInventory.find(params[:id])
@@ -15,4 +46,20 @@ class EquipmentInventoriesController < ApplicationController
     @equipment_inventory.record_equipment_condition
   end
 
+  
+  # ============================================================================
+  # Deletes a piece of equipment based on its ID and redirects to the index page
+  # ----------------------------------------------------------------------------
+  def destroy
+    @equipment_inventory = EquipmentInventory.find(params[:id])
+    @equipment_inventory.destroy
+    redirect_to equipment_inventories_path, notice: 'Equipment was successfully deleted.'
+  end
+  
+  
+  private
+  def equipment_inventory_params
+    params.require(:equipment_inventory).permit(:equipment_name, :equipment_id, :status)
+  end  
+  
 end

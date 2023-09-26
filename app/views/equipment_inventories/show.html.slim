@@ -1,0 +1,13 @@
+h1 Equipment Details
+
+h2 Equipment Name
+p = @equipment_inventory.equipment_name
+
+h2 Equipment ID
+p = @equipment_inventory.equipment_id
+
+h2 Status
+p = @equipment_inventory.status
+
+= link_to 'Edit', edit_equipment_inventory_path(@equipment_inventory)
+= link_to 'Back to Inventory', equipment_inventories_path
