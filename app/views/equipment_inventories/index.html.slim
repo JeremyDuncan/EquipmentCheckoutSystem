@@ -1,8 +1,7 @@
 h1 Equipment Inventory
 
-= link_to 'Add Equipment', new_equipment_inventory_path
-
-table
+= link_to 'Add Equipment', "equipment_inventories/new", class: 'add-button'
+table.dark-table
   thead
     tr
       th Equipment Name
@@ -16,14 +15,16 @@ table
         td = equipment.equipment_id
         td = equipment.status
         td
-          = link_to 'View', equipment_inventory_path(equipment)
-          = link_to 'Edit', edit_equipment_inventory_path(equipment)
-          = link_to 'Update Status', '#'
-          = button_to 'Delete', equipment_inventory_path(equipment), 
+          = link_to 'View', "equipment_inventories/#{equipment.id}", class: 'view-button'
+          = link_to 'Edit', "equipment_inventories/#{equipment.id}/edit", class: 'edit-button'
+          = link_to 'Update Status', '#', class: 'update-button'
+          = link_to 'Delete', "equipment_inventories/#{equipment.id}", 
                                 method: :delete, 
                                 class: 'delete-button', 
                                 id: "delete-button-#{equipment.id}"
       
+= link_to 'Back to Dashboard', '/', class: 'dashboard-button'
+    
 javascript:
   $(document).ready(function () {
     $('.delete-button').click(function (e) {

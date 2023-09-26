@@ -6,7 +6,8 @@ html
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track" => "reload"
+    = stylesheet_link_tag "dark-mode" 
     = javascript_importmap_tags
     script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"
-  body
+  body.dark-mode
     = yield
