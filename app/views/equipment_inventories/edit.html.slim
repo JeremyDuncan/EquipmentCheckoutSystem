@@ -1,13 +1,19 @@
-h1 Edit Equipment
+.container.col  
 
-= form_with(model: @equipment_inventory, local: true) do |f|
-  = f.label :equipment_name
-  = f.text_field :equipment_name
-
-  = f.label :equipment_id
-  = f.text_field :equipment_id
-
-  = f.label :status
-  = f.number_field :status
-
-  = f.submit 'Update Equipment'
+  h1 Edit Equipment
+  
+  = form_with(model: @equipment_inventory, local: true) do |f|
+    .container.col  
+      
+      = f.label :equipment_name
+      = f.text_field :equipment_name
+    
+      = f.label :equipment_id
+      = f.text_field :equipment_id
+    
+      = f.label :status
+      = f.number_field :status
+      br
+      = f.submit 'Update Equipment'
+  br  
+  = link_to 'Back', '/equipment_inventories', class: "btn"
