@@ -20,7 +20,8 @@ body.dark-mode {
 .edit-button,
 .update-button,
 .delete-button,
-.dashboard-button {
+.dashboard-button,
+.btn {
   padding: 8px 16px;
   margin: 4px;
   background-color: #333;
@@ -34,6 +35,29 @@ body.dark-mode {
 .edit-button:hover,
 .update-button:hover,
 .delete-button:hover,
-.dashboard-button:hover {
+.dashboard-button:hover,
+.btn:hover{
   background-color: #555;
 }
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.col {
+  flex-direction: column;
+}
+
+.fake-table { width: 100%; border-radius: 10px; overflow: hidden; color: black; font-weight: bold; font-size: 1.5rem; }
+.fake-table-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #ddd; }
+.fake-table-row:last-child { border-bottom: none; }
+.fake-table-cell { flex: 1; padding: 12px; }
+.fake-table-header { background-color: #676767; color: #fff; }
+.fake-table-body { background-color: #f4f4f4; }
+body {font-family: Arial, sans-serif;}
+h1 { font-size: 2.5em; margin-bottom: 20px; }
