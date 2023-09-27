@@ -52,6 +52,9 @@ body.dark-mode {
 .col {
   flex-direction: column;
 }
+.no-pad {
+  padding: 0px;
+}
 
 .fake-table { width: 100%; border-radius: 10px; overflow: hidden; color: black; font-weight: bold; font-size: 1.5rem; }
 .fake-table-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #ddd; }
