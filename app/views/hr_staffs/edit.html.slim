@@ -1,0 +1,13 @@
+.container.col  
+  h1 Edit HR Employee
+  = form_with(model: @hr_staff, local: true) do |f|
+    .container.col  
+      = f.label      :first_name
+      = f.text_field :first_name
+    
+      = f.label      :last_name
+      = f.text_field :last_name
+      br
+      = f.submit 'Update HR Employee'
+  br  
+  = link_to 'Back', '/hr_staffs', class: "btn"
