@@ -10,9 +10,11 @@ This repository contains all the deliverables for Lab 4 of the Software Design a
 - [Deliverables](#deliverables)
 - [Required Software](#required-software)
 - [Lab Steps](#lab-steps)
-- [Submission](#submission)
-- [Rubric](#rubric)
-- [Docker Setup](#docker-setup)
+- [Week 5 Project Submission](#week-5-project-submission)
+- [Class Rubric](#class-rubric)
+- [Docker Installation Guide](#docker-installation-guide)
+- [Docker App Deployment Guide](#docker-app-deployment-guide)
+
 
 ### Deliverables
 - Step 1: Create a software design.
@@ -40,7 +42,7 @@ Detailed lab steps are available in the Lab Steps document. This includes:
 - Beginning the Construction of Components
 - Updating Project Documents
 
-### Submission
+### Week 5 Project Submission
 Create a zipped archive containing the following files:
 - Software Design Description (SDD)
 - Source code for architectural framework
@@ -50,17 +52,59 @@ Create a zipped archive containing the following files:
 
 Submit the zipped file as per the instructions.
 
-### Rubric
+### Class Rubric
 - Software Design Description: 35 points
 - Architectural Framework Code: 20 points
 - Status/Description of Program Code Completed to Date: 5 points
 - Updated Project Documents and Time Sheets: 5 points
 - Individual Team Member Cumulative Time Sheet: 5 points
 
-### Docker Setup
+# App Environment Setup
+
+### Docker Installation Guide
+
+#### MacOS
+
+1. **Download Docker Desktop**: Visit the [Docker Desktop for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac/) download page and download the installer.
+
+2. **Install Docker Desktop**: Double-click the downloaded `.dmg` file and follow the installation instructions.
+
+3. **Verify Installation**: Open a terminal and run `docker --version` to verify that Docker was installed correctly.
+
+#### Linux (Ubuntu)
+
+1. **Update Package Index**: Open a terminal and run `sudo apt update`.
+
+2. **Install Dependencies**: Run `sudo apt install apt-transport-https ca-certificates curl software-properties-common`.
+
+3. **Add Docker GPG Key**: Run `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`.
+
+4. **Add Docker Repository**: Run `sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"`.
+
+5. **Install Docker**: Run `sudo apt update` followed by `sudo apt install docker-ce`.
+
+6. **Verify Installation**: Run `docker --version`.
+
+#### Windows
+
+1. **Download Docker Desktop**: Visit the [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows/) download page and download the installer.
+
+2. **Install Docker Desktop**: Double-click the downloaded `.exe` file and follow the installation instructions.
+
+3. **Verify Installation**: Open a Command Prompt and run `docker --version`.
+
+#### Common Post-Installation Steps
+
+1. **Start Docker**: If not started automatically, launch Docker from the Applications menu.
+
+2. **Test Docker**: Open a terminal or Command Prompt and run `docker run hello-world` to verify that Docker can pull and run images.
+
+
+
+### Docker App Deployment Guide
 To set up and run the project using Docker, follow these steps:
 
-1. **Prerequisites**: Make sure you have Docker and Docker Compose installed on your machine.
+1. **Prerequisites**: Make sure you have Docker and Docker Compose installed on your machine.(See [Docker Installation Guide](#docker-installation-guide))
 
 2. **Clone the Repository**: Clone this repository to your local machine.
 
