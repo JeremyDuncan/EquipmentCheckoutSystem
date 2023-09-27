@@ -1,0 +1,19 @@
+
+.container.col  
+
+  h1 Add New Equipment
+  
+  = form_with(model: @equipment_inventory, local: true) do |f|
+    .container.col  
+      = f.label :equipment_name
+      = f.text_field :equipment_name
+    
+      = f.label :equipment_id
+      = f.text_field :equipment_id
+    
+      = f.label :status
+      = f.number_field :status
+      br
+      = f.submit 'Add Equipment'
+  br  
+  = link_to 'Back', '/equipment_inventories', class: "btn"

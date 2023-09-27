@@ -1,5 +1,7 @@
-h1 All Maintenance Staff
-
-ul
-  - @maintenance_staffs.each do |staff|
-    li= link_to staff.name, maintenance_staff_path(staff)
+.container.col
+  h1 All Maintenance Staff
+  
+  ul
+    - @maintenance_staffs.each do |staff|
+      li= link_to staff.full_name, maintenance_staff_path(staff)
+  = link_to 'Back to Dashboard', '/', class: 'dashboard-button'
