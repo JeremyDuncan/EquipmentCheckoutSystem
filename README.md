@@ -1,10 +1,10 @@
-# CEIS400-Group-4
+# Equipment Checkout System (ECS)
 DeVry-CEIS400 Software Engineering 2 Group Repo
 
 ## Course Project Lab 4 of 6: Software Design and Construction
 
 ### Overview
-This repository contains all the deliverables for Lab 4 of the Software Design and Construction course. This lab focuses on the design and initial construction of the software project.
+This repository contains all the source code for CEIS400. This focuses on the design and initial construction of the software project.
 
 ### Table of Contents
 - [Deliverables](#deliverables)
@@ -26,10 +26,11 @@ This repository contains all the deliverables for Lab 4 of the Software Design a
 - Step 7: Submit deliverables (IN ZIP FILE).
 
 ### Required Software
-- Microsoft Visio: For Step 1
-- Microsoft Word: For Steps 1, 2, and 6
-- Microsoft Visual Studio: For Steps 4 and 5
-- Microsoft Project: For Step 6
+- Microsoft Visio
+- Microsoft Word
+- Microsoft Visual Studio
+- Microsoft Project
+- Git
 
 ### Lab Steps
 Detailed lab steps are available in the Lab Steps document. This includes:
