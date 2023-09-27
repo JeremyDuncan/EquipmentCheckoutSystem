@@ -40,6 +40,20 @@ class EquipmentInventoriesController < ApplicationController
     @equipment_inventory.update_equipment_status
   end
 
+  
+  # =======================
+  # toggle equipment status
+  # -----------------------
+  def toggle_status
+    @equipment_inventory = EquipmentInventory.find(params[:id])
+    if @equipment_inventory.checked_in?
+      @equipment_inventory.update(status: 1) # Checked out
+    else
+      @equipment_inventory.update(status: 0) # Checked in
+    end
+    render json: { status: @equipment_inventory.status }
+  end
+
   # Custom method to record equipment condition
   def record_equipment_condition
     @equipment_inventory = EquipmentInventory.find(params[:id])

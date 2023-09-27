@@ -1,13 +1,23 @@
-h1 Equipment Details
+- equipment = @equipment_inventory
+.container.col 
+  h1 Equipment Details
+  div.fake-table
+    div.fake-table-row.fake-table-header
+      div.fake-table-cell Equipment
+      div.fake-table-cell Info
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell Equipment Name
+      div.fake-table-cell = equipment.equipment_name
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell Equipment ID
+      div.fake-table-cell = equipment.equipment_id
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell Status
+      - if equipment.checked_in?
+        div.fake-table-cell = "Checked In"
+      - else
+        div.fake-table-cell = "Checked Out"
+  .container
+    = link_to 'Edit', "/equipment_inventories/#{equipment.id}/edit", class: 'btn'
+    = link_to 'Back', '/equipment_inventories', class: "btn"
 
-h2 Equipment Name
-p = @equipment_inventory.equipment_name
-
-h2 Equipment ID
-p = @equipment_inventory.equipment_id
-
-h2 Status
-p = @equipment_inventory.status
-
-= link_to 'Edit', edit_equipment_inventory_path(@equipment_inventory)
-= link_to 'Back to Inventory', equipment_inventories_path

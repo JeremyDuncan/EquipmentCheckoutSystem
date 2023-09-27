@@ -28,4 +28,17 @@ class EquipmentInventory < ApplicationRecord
   end
 
 
+  # ======================================
+  # Checks if the equipment is checked out
+  # --------------------------------------
+  def checked_out?
+    status == 1
+  end
+  # =====================================
+  # Checks if the equipment is checked in
+  # -------------------------------------
+  def checked_in?
+    status == 0
+  end
+  
 end

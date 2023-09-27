@@ -1,34 +1,54 @@
-h1 Equipment Inventory
-
-= link_to 'Add Equipment', new_equipment_inventory_path
-
-table
-  thead
-    tr
-      th Equipment Name
-      th Equipment ID
-      th Status
-      th Actions
-  tbody
-    - @equipment_inventories.each do |equipment|
+.container.col  
+  h1 Equipment Inventory
+  = link_to 'Add Equipment', "equipment_inventories/new", class: 'add-button'
+  br
+  br  
+  table.dark-table
+    thead
       tr
-        td = equipment.equipment_name
-        td = equipment.equipment_id
-        td = equipment.status
-        td
-          = link_to 'View', equipment_inventory_path(equipment)
-          = link_to 'Edit', edit_equipment_inventory_path(equipment)
-          = link_to 'Update Status', '#'
-          = button_to 'Delete', equipment_inventory_path(equipment), 
-                                method: :delete, 
-                                class: 'delete-button', 
-                                id: "delete-button-#{equipment.id}"
-      
+        th Equipment Name
+        th Equipment ID
+        th Status
+        th Actions
+    tbody
+      - @equipment_inventories.each do |equipment|
+        tr
+          td = equipment.equipment_name
+          td = equipment.equipment_id
+          td class="status-cell" id="status-#{equipment.id}" = equipment.checked_in? ? "Checked In" : "Checked Out"
+          td
+            .container.no-pad
+              = link_to 'View', "equipment_inventories/#{equipment.id}", class: 'view-button'
+              = link_to 'Edit', "equipment_inventories/#{equipment.id}/edit", class: 'edit-button'
+              = link_to (equipment.checked_in? ? "Check Out" : "Check In"), '#', 
+                      class: 'update-button', 
+                      data: { id: equipment.id, 
+                              status: equipment.checked_in? ? "Check Out" : "Check In" }
+              = form_with url: "equipment_inventories/#{equipment.id}", method: :delete, class: 'delete-form' do
+                = submit_tag 'Delete', class: 'delete-button', data: { confirm: 'Are you sure?' }
+  br      
+  = link_to 'Back to Dashboard', '/', class: 'dashboard-button'
+
+  
 javascript:
   $(document).ready(function () {
-    $('.delete-button').click(function (e) {
-      if (!window.confirm('Are you sure?')) {
-        e.preventDefault();
-      }
+    const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $('.update-button').click(function (e) {
+      e.preventDefault();
+      console.log("CLICK")
+      const equipmentId   = $(this).data('id');
+      const currentStatus = $(this).data('status');
+      const newStatus     = currentStatus === "Check Out" ? "Check In"   : "Check Out";
+      const newStatusText = currentStatus === "Check In"  ? "Checked In" : "Checked Out";
+      
+      $.ajax({
+        url: `/equipment_inventories/${equipmentId}/toggle_status`,
+        method: 'POST',
+        headers: {'X-CSRF-Token': csrfToken},
+        success: function (response) {
+          $(`#status-${equipmentId}`).text(newStatusText);
+          $(`[data-id="${equipmentId}"]`).text(newStatus).data('status', newStatus);
+        }
+      });
     });
   });
