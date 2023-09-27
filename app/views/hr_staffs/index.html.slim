@@ -1,5 +1,33 @@
-h1 All HR Staff
+.container.col  
+  h1 Human Resources Employees
+  = link_to 'Add HR Employee', "hr_staffs/new", class: 'add-button'
+  br
+  br  
+  table.dark-table
+    thead
+      tr
+        th First Name
+        th Last Name
+        th Actions
+    tbody
+      - @hr_staffs.each do |staff|
+        tr
+          td = staff.first_name
+          td = staff.last_name
+          td
+            = link_to 'View', "hr_staffs/#{staff.id}",      class: 'view-button'
+            = link_to 'Edit', "hr_staffs/#{staff.id}/edit", class: 'edit-button'
 
-ul
-  - @hr_staffs.each do |staff|
-    li= link_to staff.name, hr_staff_path(staff)
+            = link_to 'Delete', "hr_staffs/#{staff.id}", method: :delete, class: 'delete-button', id: "delete-button-#{staff.id}"
+  br      
+  = link_to 'Back to Dashboard', '/', class: 'dashboard-button'
+
+  
+javascript:
+  $(document).ready(function () {
+    $('.delete-button').click(function (e) {
+      if (!window.confirm('Are you sure?')) {
+        e.preventDefault();
+      }
+    });
+  });
