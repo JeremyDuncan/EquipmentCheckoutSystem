@@ -1,2 +1,11 @@
-h1 Dashboard
-= link_to 'Equipment Inventory', '/equipment_inventories'
+
+style
+  | body { font-family: Arial, sans-serif; background-color: #333; color: #fff; }
+  | h1 { font-size: 2.5em; margin-bottom: 20px; }
+.container.col  
+  h1 Equipment Checkout System (ECS)
+  h2 Dashboard
+  = link_to 'Equipment Inventory', '/equipment_inventories', class: "btn"
+  = link_to 'Human Resources',     '/hr_staffs',             class: "btn"
+  = link_to 'Maintenance Staff',   '/maintenance_staffs',    class: "btn"
+  = link_to 'Management Staff',    '/management_staffs',     class: "btn"
