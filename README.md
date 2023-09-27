@@ -1,7 +1,6 @@
 # Equipment Checkout System (ECS)
-DeVry-CEIS400 Software Engineering 2 Group Repo
 
-## Course Project Lab 4 of 6: Software Design and Construction
+## DeVry-CEIS400 Course Project
 
 ### Overview
 This repository contains all the source code for CEIS400. This focuses on the design and initial construction of the software project.
