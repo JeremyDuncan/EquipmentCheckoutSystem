@@ -15,19 +15,11 @@
           td = staff.first_name
           td = staff.last_name
           td
-            = link_to 'View', "hr_staffs/#{staff.id}",      class: 'view-button'
-            = link_to 'Edit', "hr_staffs/#{staff.id}/edit", class: 'edit-button'
-
-            = link_to 'Delete', "hr_staffs/#{staff.id}", method: :delete, class: 'delete-button', id: "delete-button-#{staff.id}"
-  br      
+            .container.no-pad
+              = link_to 'View', "hr_staffs/#{staff.id}",      class: 'view-button'
+              = link_to 'Edit', "hr_staffs/#{staff.id}/edit", class: 'edit-button'
+              = form_with url: "hr_staffs/#{staff.id}", method: :delete, class: 'delete-form' do
+                = submit_tag 'Delete', class: 'delete-button', data: { confirm: 'Are you sure?' }
+  br        
   = link_to 'Back to Dashboard', '/', class: 'dashboard-button'
 
-  
-javascript:
-  $(document).ready(function () {
-    $('.delete-button').click(function (e) {
-      if (!window.confirm('Are you sure?')) {
-        e.preventDefault();
-      }
-    });
-  });
