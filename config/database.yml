@@ -79,8 +79,16 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+#production:
+#  <<: *default
+#  database: EquipmentCheckoutSystem_production
+#  username: EquipmentCheckoutSystem
+#  password: <%#= ENV["EQUIPMENTCHECKOUTSYSTEM_DATABASE_PASSWORD"] %>
+
 production:
   <<: *default
   database: EquipmentCheckoutSystem_production
-  username: EquipmentCheckoutSystem
-  password: <%= ENV["EQUIPMENTCHECKOUTSYSTEM_DATABASE_PASSWORD"] %>
+  username: postgres  # Changed to match the default PostgreSQL username
+  password: <%= ENV["POSTGRES_PASSWORD"] %>  # Changed to match the environment variable
+  host: db  # This should match the service name in docker-compose.yml
+  port: 5432  # Default PostgreSQL port
