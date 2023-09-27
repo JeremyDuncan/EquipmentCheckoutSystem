@@ -1,0 +1,18 @@
+- hr_staff = @hr_staff
+.container.col 
+  h1 HR Staff Details
+  div.fake-table
+    div.fake-table-row.fake-table-header
+      div.fake-table-cell HR Staff
+      div.fake-table-cell Info
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell First Name
+      div.fake-table-cell = hr_staff.first_name
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell Last Name
+      div.fake-table-cell = hr_staff.last_name
+      
+  .container
+    = link_to 'Edit', "/hr_staffs/#{hr_staff.id}/edit", class: 'btn'
+    = link_to 'Back', '/hr_staffs', class: "btn"
+
