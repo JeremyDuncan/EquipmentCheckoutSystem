@@ -14,4 +14,14 @@ Rails.application.routes.draw do
   resources :equipment_inventories
   resources :employee_records
   resources :reports
+  
+  
+  ##############################################################################
+  ## Custom ROUTES ##
+  ###################
+  resources :equipment_inventories do
+    member do
+      post :toggle_status
+    end
+  end
 end
