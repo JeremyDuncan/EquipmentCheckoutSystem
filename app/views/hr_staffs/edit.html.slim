@@ -1,13 +1,26 @@
-.container.col  
-  h1 Edit HR Employee
-  = form_with(model: @hr_staff, local: true) do |f|
-    .container.col  
-      = f.label      :first_name
-      = f.text_field :first_name
+.container.col.no-pad
+  #alert
+
+.container.col
+  h1.space-bot-xl Edit HR Employee
+  i.fa-solid.fa-user-pen.space-bot-xl style="color: white; font-size: 7rem;"
+  = form_with(model: @hr_staff, local: true, class: 'form-container') do |f|
+    .form-group
+      = f.label      :first_name, class: 'form-label'
+      = f.text_field :first_name, class: 'form-input'
     
-      = f.label      :last_name
-      = f.text_field :last_name
-      br
-      = f.submit 'Update HR Employee'
-  br  
-  = link_to 'Back', '/hr_staffs', class: "btn"
+    .form-group
+      = f.label      :last_name, class: 'form-label'
+      = f.text_field :last_name, class: 'form-input'
+    
+    .form-actions
+      /## UPDATE BUTTON ## 
+      button.btn.btn-primary type="submit"
+        i.fa-solid.fa-plus
+        |  Update HR Employee
+  
+  .navigation
+    /## BACK BUTTON ##
+    = link_to '/hr_staffs', class: "btn btn-secondary" do
+      i.fa-solid.fa-chevron-left
+      |  Back  

@@ -5,7 +5,17 @@ style
 .container.col  
   h1 Equipment Checkout System (ECS)
   h2 Dashboard
+  
+  /## EQUIPMENT INVENTORY BUTTON ## 
   = link_to 'Equipment Inventory', '/equipment_inventories', class: "btn"
-  = link_to 'Human Resources',     '/hr_staffs',             class: "btn"
-  = link_to 'Maintenance Staff',   '/maintenance_staffs',    class: "btn"
-  = link_to 'Management Staff',    '/management_staffs',     class: "btn"
+  
+  /## HR STAFF BUTTON ## 
+  = link_to '/hr_staffs', class: "btn" do
+    i.fa-solid.fa-user-tie
+    |   Human Resources
+    
+  /## MAINTENANCE STAFF BUTTON ## 
+  = link_to 'Maintenance Staff','/maintenance_staffs', class: "btn"
+  
+  /## MANAGEMENT STAFF BUTTON ## 
+  = link_to 'Management Staff', '/management_staffs',  class: "btn"
