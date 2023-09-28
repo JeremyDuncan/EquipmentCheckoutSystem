@@ -1,0 +1,26 @@
+- staff = @maintenance_staff
+.container.col 
+  h1.space-bot-xxl Maintenance Employee Details
+  
+  /## ICON ##
+  i.fa-regular.fa-id-card.fa-2xl.space-bot-xxl style="color: white; font-size: 7rem;"
+  
+  div.fake-table
+    div.fake-table-row.fake-table-header
+      div.fake-table-cell First Name
+      div.fake-table-cell Last Name
+      
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell = staff.first_name
+      div.fake-table-cell = staff.last_name
+      
+  .container
+    /## EDIT BUTTON ##
+    = link_to "/maintenance_staffs/#{staff.id}/edit", class: 'btn' do
+      i.fa-solid.fa-user-pen
+      |  Edit
+      
+    /## BACK BUTTON ##
+    = link_to '/maintenance_staffs', class: "btn" do
+      i.fa-solid.fa-chevron-left
+      |  Back  
