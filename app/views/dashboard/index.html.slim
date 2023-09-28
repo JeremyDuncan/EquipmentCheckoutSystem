@@ -7,7 +7,9 @@ style
   h2 Dashboard
   
   /## EQUIPMENT INVENTORY BUTTON ## 
-  = link_to 'Equipment Inventory', '/equipment_inventories', class: "btn"
+  = link_to '/equipment_inventories', class: "btn" do
+    i.fa-solid.fa-toolbox
+    |  'Equipment Inventory' 
   
   /## HR STAFF BUTTON ## 
   = link_to '/hr_staffs', class: "btn" do
