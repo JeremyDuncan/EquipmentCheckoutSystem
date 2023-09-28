@@ -49,18 +49,56 @@ body.dark-mode {
   justify-content: center;
   text-align: center;
 }
-.col {
-  flex-direction: column;
-}
-.no-pad {
-  padding: 0px;
-}
 
-.fake-table { width: 100%; border-radius: 10px; overflow: hidden; color: black; font-weight: bold; font-size: 1.5rem; }
-.fake-table-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #ddd; }
-.fake-table-row:last-child { border-bottom: none; }
-.fake-table-cell { flex: 1; padding: 12px; }
+.col     {flex-direction: column;}
+.no-pad  {padding: 0px;}
+.no-marg {margin: 0px;}
+
+/*### BOTTOM SPACE STYLES ###*/
+.space-bot-xxs {margin-bottom: 5px ;}
+.space-bot-xs  {margin-bottom: 10px;}
+.space-bot-s   {margin-bottom: 15px;}
+.space-bot-m   {margin-bottom: 20px;}
+.space-bot-l   {margin-bottom: 25px;}
+.space-bot-xl  {margin-bottom: 40px;}
+.space-bot-xxl {margin-bottom: 80px;}
+
+/*### TOP SPACE STYLES ###*/
+.space-top-xxs {margin-top: 5px ;}
+.space-top-xs  {margin-top: 10px;}
+.space-top-s   {margin-top: 15px;}
+.space-top-m   {margin-top: 20px;}
+.space-top-l   {margin-top: 25px;}
+.space-top-xl  {margin-top: 40px;}
+.space-top-xxl {margin-top: 80px;}
+
+/*### FAKE TABLE STYLES ###*/
+.fake-table        { width: 100%; border-radius: 10px; overflow: hidden; color: black; font-weight: bold; font-size: 1.5rem; }
+.fake-table-row    { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #ddd; }
+.fake-table-cell   { flex: 1; padding: 12px; }
 .fake-table-header { background-color: #676767; color: #fff; }
-.fake-table-body { background-color: #f4f4f4; }
+.fake-table-body   { background-color: #f4f4f4; }
+.fake-table-row:last-child { border-bottom: none; }
+
 body {font-family: Arial, sans-serif;}
 h1 { font-size: 2.5em; margin-bottom: 20px; }
+
+
+/*### FORM STYLES ###*/
+.form-container {background-color: #1e1e1e;padding: 20px;border-radius: 8px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);}
+.form-group     {margin-bottom: 20px;}
+.form-label     {font-weight: bold;margin-bottom: 8px;display: inline-block;color: #ffffff;}
+.form-input     {width: 80%;padding: 10px;border: 1px solid #333;border-radius: 4px;background-color: #333;color: #ffffff;}
+.btn-primary    {background-color: #007bff;color: white;cursor: pointer;}
+.btn-secondary  {background-color: #6c757d;color: white;}
+.title          {font-size: 2em;margin-bottom: 20px;color: #ffffff;}
+.navigation     {margin-top: 20px;}
+
+/*### MODAL SECTION ###*/
+.modal         {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0.7);z-index: 9999;}
+.modal-content {position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: #fff;padding: 20px;width: 300px;text-align: center;}
+.modal-actions {margin-top: 20px;}
+.modal-close   {cursor: pointer;}
+.open-modal    {cursor: pointer;}
+
+
