@@ -1,6 +1,8 @@
 - equipment = @equipment_inventory
 .container.col 
   h1 Equipment Details
+  i.fa-solid.fa-screwdriver-wrench.space-bot-xl style="font-size: 7rem"
+  
   div.fake-table
     div.fake-table-row.fake-table-header
       div.fake-table-cell Equipment
@@ -13,11 +15,20 @@
       div.fake-table-cell = equipment.equipment_id
     div.fake-table-row.fake-table-body
       div.fake-table-cell Status
-      - if equipment.checked_in?
-        div.fake-table-cell = "Checked In"
-      - else
-        div.fake-table-cell = "Checked Out"
-  .container
-    = link_to 'Edit', "/equipment_inventories/#{equipment.id}/edit", class: 'btn'
-    = link_to 'Back', '/equipment_inventories', class: "btn"
+      div.fake-table-cell
+        i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
+        - if equipment.checked_in?
+          |  Checked In
+        - else
+          |  Checked Out
 
+  .container
+    /## EDIT BUTTON ##
+    = link_to "/equipment_inventories/#{equipment.id}/edit", class: 'btn' do
+      i.fa-solid.fa-user-pen
+      |  Edit
+      
+    /## BACK BUTTON ##
+    = link_to '/equipment_inventories', class: "btn" do
+      i.fa-solid.fa-chevron-left
+      |  Back  

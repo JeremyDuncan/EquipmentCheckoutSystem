@@ -1,54 +1,143 @@
-.container.col  
+form#hiddenDeleteForm method="post" style="display:none;"
+  input type="hidden" name="_method" value="delete"
+  input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
+  
+.container.col 
   h1 Equipment Inventory
-  = link_to 'Add Equipment', "equipment_inventories/new", class: 'add-button'
+  i.fa-solid.fa-toolbox.space-bot-xl style="font-size: 7rem"
+  
+  = link_to  "equipment_inventories/new", class: 'add-button' do
+    i.fa-solid.fa-wrench
+    |  Add Equipment 
   br
   br  
-  table.dark-table
+  table.dark-table style= "width: 900px"
     thead
       tr
         th Equipment Name
         th Equipment ID
-        th Status
+        th Availability
+        th Check-In/Out
         th Actions
     tbody
-      - @equipment_inventories.each do |equipment|
+      - @equipment_inventories.sort_by(&:id).each do |equipment|
         tr
           td = equipment.equipment_name
           td = equipment.equipment_id
-          td class="status-cell" id="status-#{equipment.id}" = equipment.checked_in? ? "Checked In" : "Checked Out"
+          td class="status-cell" id="status-#{equipment.id}"
+            i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
+            span.status-text
+              - if equipment.checked_in?
+                |  IN
+              - else
+                |  OUT
+          td
+            /## TOGGLE SWITCH ##
+            .center-div style="display: flex; justify-content: center"  
+              .toggle-switch 
+                input.toggle-switch-checkbox type="checkbox" id="toggle-#{equipment.id}" checked=(equipment.checked_in?) data-id=equipment.id data-status=(equipment.checked_in? ? "Check Out" : "Check In")
+                label.toggle-switch-label for="toggle-#{equipment.id}"
+
           td
             .container.no-pad
-              = link_to 'View', "equipment_inventories/#{equipment.id}", class: 'view-button'
-              = link_to 'Edit', "equipment_inventories/#{equipment.id}/edit", class: 'edit-button'
-              = link_to (equipment.checked_in? ? "Check Out" : "Check In"), '#', 
-                      class: 'update-button', 
-                      data: { id: equipment.id, 
-                              status: equipment.checked_in? ? "Check Out" : "Check In" }
-              = form_with url: "equipment_inventories/#{equipment.id}", method: :delete, class: 'delete-form' do
-                = submit_tag 'Delete', class: 'delete-button', data: { confirm: 'Are you sure?' }
-  br      
-  = link_to 'Back to Dashboard', '/', class: 'dashboard-button'
+              = link_to "equipment_inventories/#{equipment.id}", class: 'view-button' do
+                i.fa-solid.fa-eye
+                |  View
+                
+              = link_to "equipment_inventories/#{equipment.id}/edit", class: 'edit-button' do 
+                i.fa-solid.fa-pen-to-square
+                |  Edit
+                
+              /## DELETE BUTTON ##  
+              a.open-modal.delete-button data-url=equipment_inventory_path(equipment)
+                i.fa-solid.fa-trash
+                |  Delete   
+                
+  /## DASHBOARD BUTTON ## 
+  .space-bot-m              
+  = link_to '/', class: 'dashboard-button' do
+    i.fa-solid.fa-house
+    |  Back to Dashboard
 
-  
-javascript:
-  $(document).ready(function () {
-    const csrfToken = $('meta[name="csrf-token"]').attr('content');
-    $('.update-button').click(function (e) {
-      e.preventDefault();
-      console.log("CLICK")
-      const equipmentId   = $(this).data('id');
-      const currentStatus = $(this).data('status');
-      const newStatus     = currentStatus === "Check Out" ? "Check In"   : "Check Out";
-      const newStatusText = currentStatus === "Check In"  ? "Checked In" : "Checked Out";
+
+/###############################################################################
+/## MODAL SECTION ##
+/###################    
+#deleteModal.modal
+  .modal-content
+    h4.space-bot-xl style="color: black; font-size: 1.2rem" Are you sure you want to delete this equipment? 
+    .modal-actions
       
-      $.ajax({
-        url: `/equipment_inventories/${equipmentId}/toggle_status`,
-        method: 'POST',
-        headers: {'X-CSRF-Token': csrfToken},
-        success: function (response) {
-          $(`#status-${equipmentId}`).text(newStatusText);
-          $(`[data-id="${equipmentId}"]`).text(newStatus).data('status', newStatus);
-        }
-      });
+      /## CONFIRM MODAL BUTTON ##
+      = link_to '#', id: 'confirmDelete', class: 'delete-button' do
+        i.fa-solid.fa-thumbs-up
+        |  Yes, Delete 
+      
+      /## CANCEL MODAL BUTTON ##   
+      a.btn.modal-close 
+        i.fa-solid.fa-thumbs-down
+        |  No, Cancel 
+    
+    
+/###############################################################################
+/## JAVASCRIPT SECTION ##
+/########################          
+javascript:
+    $(document).ready(function () {
+        $('.open-modal').on('click', function (e) {
+            e.preventDefault();
+            const deleteUrl = $(this).data('url');
+            $('#hiddenDeleteForm').attr('action', deleteUrl);
+            $('#deleteModal').show();
+        });
+        $('#confirmDelete').on('click', function (e) {
+            e.preventDefault();
+            $('#hiddenDeleteForm').submit();
+        });
+        $('.modal-close').on('click', function () {
+            $('#deleteModal').hide();
+        });
+        // =============
+        // Toggle switch
+        // -------------
+        $('.toggle-switch-checkbox').change(function () {
+            const equipmentId   = $(this).data('id');
+            const currentStatus = $(this).data('status');
+            const newStatus     = currentStatus === "Check Out" ? "Check In" : "Check Out";
+            const newStatusText = currentStatus === "Check In"  ? " IN" : " OUT";
+            const newIconClass  = currentStatus === "Check In"  ? "fa-check-circle" : "fa-exclamation-circle";
+            const csrfToken     = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: `/equipment_inventories/${equipmentId}/toggle_status`,
+                method: 'POST',
+                headers: {'X-CSRF-Token': csrfToken},
+                success: function (response) {
+                    const statusCell = $(`#status-${equipmentId}`);
+                    statusCell.find('i.fa').attr('class', `fa ${newIconClass}`);
+                    statusCell.find('span.status-text').text(newStatusText);
+                    $(`#toggle-${equipmentId}`).data('status', newStatus);
+                }
+            });
+        });
+        
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $('.update-button').click(function (e) {
+            e.preventDefault();
+            console.log("CLICK")
+            const equipmentId   = $(this).data('id');
+            const currentStatus = $(this).data('status');
+            const newStatus     = currentStatus === "Check Out" ? "Check In"   : "Check Out";
+            const newStatusText = currentStatus === "Check In"  ? "Checked In" : "Checked Out";
+
+            $.ajax({
+                url: `/equipment_inventories/${equipmentId}/toggle_status`,
+                method: 'POST',
+                headers: {'X-CSRF-Token': csrfToken},
+                success: function (response) {
+                    $(`#status-${equipmentId}`).text(newStatusText);
+                    $(`[data-id="${equipmentId}"]`).text(newStatus).data('status', newStatus);
+                }
+            });
+        });
     });
-  });

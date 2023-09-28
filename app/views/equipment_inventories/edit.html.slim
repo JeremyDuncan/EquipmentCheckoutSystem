@@ -1,19 +1,25 @@
-.container.col  
+.container.col.no-pad
+  #alert
 
-  h1 Edit Equipment
+.container.col
+  h1.space-bot-xl Edit Equipment
+  i.fa-solid.fa-pen-to-square.space-bot-xl style="color: white; font-size: 7rem;"
+  = form_with(model: @equipment_inventory, local: true, class: 'form-container') do |f|
+    .form-group
+      = f.label      :equipment_name, class: 'form-label'
+      = f.text_field :equipment_name, class: 'form-input'
+    .form-group
+      = f.label      :equipment_id,   class: 'form-label'
+      = f.text_field :equipment_id,   class: 'form-input'
+    .form-actions
+      /## UPDATE BUTTON ## 
+      button.btn.btn-primary type="submit"
+        i.fa-solid.fa-plus
+        |  Update Equipment
   
-  = form_with(model: @equipment_inventory, local: true) do |f|
-    .container.col  
-      
-      = f.label :equipment_name
-      = f.text_field :equipment_name
-    
-      = f.label :equipment_id
-      = f.text_field :equipment_id
-    
-      = f.label :status
-      = f.number_field :status
-      br
-      = f.submit 'Update Equipment'
-  br  
-  = link_to 'Back', '/equipment_inventories', class: "btn"
+  .navigation
+    /## BACK BUTTON ##
+    = link_to '/equipment_inventories', class: "btn btn-secondary" do
+      i.fa-solid.fa-chevron-left
+      |  Back  
+  

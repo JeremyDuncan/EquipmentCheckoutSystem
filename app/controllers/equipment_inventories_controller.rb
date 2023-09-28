@@ -14,7 +14,13 @@ class EquipmentInventoriesController < ApplicationController
     if @equipment_inventory.save
       redirect_to equipment_inventories_path, notice: 'Equipment was successfully added.'
     else
-      render :new
+      flash.now[:alert] = @equipment_inventory.errors.full_messages.join(", ")
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace('alert', 
+                                                                          partial: 'turbo_layouts/alert', 
+                                                                          locals: { alert: flash.now[:alert] }) }
+          format.html { render :edit }
+      end
     end
   end
   
@@ -27,7 +33,13 @@ class EquipmentInventoriesController < ApplicationController
     if @equipment_inventory.update(equipment_inventory_params)
       redirect_to equipment_inventories_path, notice: 'Equipment was successfully updated.'
     else
-      render :edit
+      flash.now[:alert] = @equipment_inventory.errors.full_messages.join(", ")
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace('alert', 
+                                                                          partial: 'turbo_layouts/alert', 
+                                                                          locals: { alert: flash.now[:alert] }) }
+          format.html { render :edit }
+      end
     end
   end
   def show
