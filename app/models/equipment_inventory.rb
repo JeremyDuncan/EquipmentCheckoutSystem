@@ -1,7 +1,11 @@
 class EquipmentInventory < ApplicationRecord
   belongs_to :maintenance_staff, optional: true
-  belongs_to :management_staff, optional: true
-
+  belongs_to :management_staff,  optional: true
+  # =====================================================================
+  # This validation ensures that both equipment_id and equipment_name are 
+  # present before saving the model.
+  # ---------------------------------------------------------------------
+  validates :equipment_id, :equipment_name, presence: true
 
   #TODO=> SETUP METHODS
   # Check-in equipment
