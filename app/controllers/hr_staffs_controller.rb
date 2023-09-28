@@ -15,7 +15,13 @@ class HrStaffsController < ApplicationController
     if @hr_staff.save
       redirect_to hr_staffs_path, notice: 'HR Employee was successfully added.'
     else
-      render :new
+      flash.now[:alert] = @hr_staff.errors.full_messages.join(", ")
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('alert', 
+                                                                        partial: 'turbo_layouts/alert', 
+                                                                        locals: { alert: flash.now[:alert] }) }
+        format.html { render :new }
+      end
     end
   end
   
@@ -28,13 +34,20 @@ class HrStaffsController < ApplicationController
     if @hr_staff.update(hr_staff_params)
       redirect_to hr_staffs_path, notice: 'HR Employee was successfully updated.'
     else
-      render :edit
+      flash.now[:alert] = @hr_staff.errors.full_messages.join(", ")
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace('alert', 
+                                                                          partial: 'turbo_layouts/alert', 
+                                                                          locals: { alert: flash.now[:alert] }) }
+          format.html { render :edit }
+      end
     end
   end
   
   def show
     @hr_staff = HrStaff.find(params[:id])
   end
+  
   def destroy
     @hr_staff = HrStaff.find(params[:id])
     @hr_staff.destroy
