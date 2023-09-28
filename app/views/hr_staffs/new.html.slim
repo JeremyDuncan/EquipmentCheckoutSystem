@@ -1,19 +1,26 @@
+.container.col.no-pad
+  #alert
 
-.container.col  
-
-  h1 Add New Equipment
-  
-  = form_with(model: @equipment_inventory, local: true) do |f|
-    .container.col  
-      = f.label :equipment_name
-      = f.text_field :equipment_name
+.container.col
+  h1.space-bot-xl Add HR Staff Member
+  i.fa-solid.fa-user-plus.space-bot-xl style="font-size: 7rem;"
+  = form_with(model: @hr_staff, local: true, class: 'form-container') do |f|
+    .form-group
+      = f.label      :first_name, class: 'form-label'
+      = f.text_field :first_name, class: 'form-input'
     
-      = f.label :equipment_id
-      = f.text_field :equipment_id
+    .form-group
+      = f.label      :last_name, class: 'form-label'
+      = f.text_field :last_name, class: 'form-input'
     
-      = f.label :status
-      = f.number_field :status
-      br
-      = f.submit 'Add Equipment'
-  br  
-  = link_to 'Back', '/equipment_inventories', class: "btn"
+    .form-actions
+      /## ADD BUTTON ## 
+      button.btn.btn-primary type="submit"
+        i.fa-solid.fa-plus
+        |  Add HR Employee
+        
+  .navigation
+    /## BACK BUTTON ##
+    = link_to '/hr_staffs', class: "btn btn-secondary" do
+      i.fa-solid.fa-chevron-left
+      |  Back  

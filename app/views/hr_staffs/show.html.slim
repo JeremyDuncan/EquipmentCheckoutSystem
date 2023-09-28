@@ -1,18 +1,26 @@
-- hr_staff = @hr_staff
+- staff = @hr_staff
 .container.col 
-  h1 HR Staff Details
+  h1.space-bot-xxl HR Staff Details
+  
+  /## ICON ##
+  i.fa-regular.fa-id-card.fa-2xl.space-bot-xxl style="color: white; font-size: 7rem;"
+  
   div.fake-table
     div.fake-table-row.fake-table-header
-      div.fake-table-cell HR Staff
-      div.fake-table-cell Info
-    div.fake-table-row.fake-table-body
       div.fake-table-cell First Name
-      div.fake-table-cell = hr_staff.first_name
-    div.fake-table-row.fake-table-body
       div.fake-table-cell Last Name
-      div.fake-table-cell = hr_staff.last_name
+      
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell = staff.first_name
+      div.fake-table-cell = staff.last_name
       
   .container
-    = link_to 'Edit', "/hr_staffs/#{hr_staff.id}/edit", class: 'btn'
-    = link_to 'Back', '/hr_staffs', class: "btn"
-
+    /## EDIT BUTTON ##
+    = link_to "/hr_staffs/#{staff.id}/edit", class: 'btn' do
+      i.fa-solid.fa-user-pen
+      |  Edit
+      
+    /## BACK BUTTON ##
+    = link_to '/hr_staffs', class: "btn" do
+      i.fa-solid.fa-chevron-left
+      |  Back  
