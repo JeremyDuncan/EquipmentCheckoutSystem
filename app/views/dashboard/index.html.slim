@@ -9,7 +9,7 @@ style
   /## EQUIPMENT INVENTORY BUTTON ## 
   = link_to '/equipment_inventories', class: "btn" do
     i.fa-solid.fa-toolbox
-    |  'Equipment Inventory' 
+    |  Equipment Inventory 
   
   /## HR STAFF BUTTON ## 
   = link_to '/hr_staffs', class: "btn" do
@@ -17,7 +17,9 @@ style
     |   Human Resources
     
   /## MAINTENANCE STAFF BUTTON ## 
-  = link_to 'Maintenance Staff','/maintenance_staffs', class: "btn"
+  = link_to '/maintenance_staffs', class: "btn" do
+    i.fa-solid.fa-users-gear
+    |  Maintenance Staff 
   
   /## MANAGEMENT STAFF BUTTON ## 
   = link_to 'Management Staff', '/management_staffs',  class: "btn"
