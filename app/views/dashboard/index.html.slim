@@ -1,25 +1,46 @@
+.container.col
+  h1 Dashboard
+  h2 Choose an Option
+
+  /## EQUIPMENT INVENTORY BUTTON ##
+  = link_to '/equipment_inventories', class: "btn" do
+    i.fa.fa-toolbox
+    |   Equipment Inventory
+
+  /## HR STAFF BUTTON ##
+  = link_to '/hr_staffs', class: "btn" do
+    i.fa.fa-user-tie
+    |   Human Resources
+
+  /## MAINTENANCE STAFF BUTTON ##
+  = link_to '/maintenance_staffs', class: "btn" do
+    i.fa.fa-users-cog
+    |   Maintenance Staff
+
+  /## MANAGEMENT STAFF BUTTON ##
+  = link_to '/management_staffs',  class: "btn" do
+    i.fa.fa-briefcase
+    |   Management Staff
 
 style
-  | body { font-family: Arial, sans-serif; background-color: #333; color: #fff; }
-  | h1 { font-size: 2.5em; margin-bottom: 20px; }
-.container.col  
-  h1 Equipment Checkout System (ECS)
-  h2 Dashboard
-  
-  /## EQUIPMENT INVENTORY BUTTON ## 
-  = link_to '/equipment_inventories', class: "btn" do
-    i.fa-solid.fa-toolbox
-    |  Equipment Inventory
-  
-  /## HR STAFF BUTTON ## 
-  = link_to '/hr_staffs', class: "btn" do
-    i.fa-solid.fa-user-tie
-    |   Human Resources
-    
-  /## MAINTENANCE STAFF BUTTON ## 
-  = link_to '/maintenance_staffs', class: "btn" do
-    i.fa-solid.fa-users-gear
-    |  Maintenance Staff 
-  
-  /## MANAGEMENT STAFF BUTTON ## 
-  = link_to 'Management Staff', '/management_staffs',  class: "btn"
+  |
+    .btn {
+      background-color: #555;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 30%;
+      text-align: center;
+      font-size: 1.2em;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #777;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 1em;
+    }

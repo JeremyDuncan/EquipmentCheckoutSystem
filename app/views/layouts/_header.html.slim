@@ -1,0 +1,56 @@
+/ ================================================================================
+/ This adds navigation links. The header will also stick to the top of the screen.
+/ --------------------------------------------------------------------------------
+style
+  |
+    header {
+      background-color: #222;
+      padding: .8em;
+      text-align: center;
+      font-size: 1.2em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    nav a:hover {
+      background-color: #555;
+    }
+    nav i {
+      font-size: 1.2em;
+    }
+
+header
+  h2 style="1.1rem; padding: 0px; margin: 0px"
+    | Equipment Checkout System (ECS)
+
+  nav.space-top-s
+    = link_to '/' do
+      i.fa.fa-home
+      | Dashboard
+    = link_to '/equipment_inventories' do
+      i.fa.fa-toolbox
+      | Inventory
+    = link_to '/hr_staffs' do
+      i.fa.fa-user-tie
+      | HR
+    = link_to '/maintenance_staffs' do
+      i.fa.fa-users-cog
+      | Maintenance
+    = link_to '/management_staffs' do
+      i.fa.fa-briefcase
+      | Management
