@@ -14,14 +14,14 @@ form#hiddenDeleteForm method="post" style="display:none;"
   table.dark-table style= "width: 900px"
     thead
       tr
-        th Equipment Name
-        th Equipment ID
-        th Availability
+        th.sortable data-sort="name"  Equipment Name <i class="fa fa-sort"></i>
+        th.sortable data-sort="id"    Equipment ID <i class="fa fa-sort"></i>
+        th.sortable data-sort="status" Availability <i class="fa fa-sort"></i>
         th Check-In/Out
         th Actions
     tbody
-      - @equipment_inventories.sort_by(&:id).each do |equipment|
-        tr
+      - @equipment_inventories.each do |equipment|
+        tr data-name=equipment.equipment_name data-id=equipment.equipment_id data-status=(equipment.checked_in? ? "IN" : "OUT")
           td = equipment.equipment_name
           td = equipment.equipment_id
           td class="status-cell" id="status-#{equipment.id}"
@@ -139,5 +139,54 @@ javascript:
                     $(`[data-id="${equipmentId}"]`).text(newStatus).data('status', newStatus);
                 }
             });
+        });
+
+        let currentSortKey = null;
+        let sortOrder = 'default';
+
+        // Sorting function
+        $('.sortable').click(function () {
+            const sortKey = $(this).data('sort');
+
+            // Reset other headers if a different header is clicked
+            if (currentSortKey !== sortKey) {
+                $('.sortable').find('i').attr('class', 'fa fa-sort');
+                sortOrder = 'default';
+            }
+
+            // Update sort order
+            if (sortOrder === 'default') {
+                sortOrder = 'asc';
+            } else if (sortOrder === 'asc') {
+                sortOrder = 'desc';
+            } else {
+                sortOrder = 'default';
+            }
+
+            // Update visual indicator
+            $(this).find('i').attr('class', sortOrder === 'default' ? 'fa fa-sort' : `fa fa-sort-${sortOrder}`);
+
+            const rows = $('tbody tr').get();
+            rows.sort(function (a, b) {
+                const A = $(a).data(sortKey).toString().toUpperCase();
+                const B = $(b).data(sortKey).toString().toUpperCase();
+                if (A < B) {
+                    return sortOrder === 'asc' ? -1 : 1;
+                }
+                if (A > B) {
+                    return sortOrder === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+
+            if (sortOrder === 'default') {
+                // Reload original order (you may need to adjust this part based on how you load the original order)
+                location.reload();
+            } else {
+                $.each(rows, function (index, row) {
+                    $('tbody').append(row);
+                });
+            }
+            currentSortKey = sortKey;
         });
     });
