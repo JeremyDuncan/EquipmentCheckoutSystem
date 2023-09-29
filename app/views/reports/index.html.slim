@@ -1,5 +1,89 @@
-h1 All Reports
+form#hiddenDeleteForm method="post" style="display:none;"
+  input type="hidden" name="_method" value="delete"
+  input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
 
-ul
-  - @reports.each do |report|
-    li= link_to report.name, report_path(report)
+.container.col
+  h1.space-bot-xl Reports
+  i.fa-solid.fa-user-tie.space-bot-xl style="font-size: 7rem;"
+  = link_to "reports/new", class: 'add-button' do
+    i.fa-solid.fa-user-plus
+    |  Add Report'
+  .space-bot-s
+  table.dark-table
+    thead
+      tr
+        th Report ID
+        th Report Type
+        th Staff ID
+        th Staff Name
+    tbody
+      - @reports.each do |report|
+        - management_staff = ManagementStaff.find_by(id: report.management_staffs_id)
+        tr
+          td = report.id
+          td = report.report_type
+          td = report.management_staffs_id
+          td = management_staff.full_name
+            .container.no-pad
+              /## VIEW BUTTON ##
+              = link_to "reports/#{report.id}",class: 'view-button' do
+                i.fa-regular.fa-id-card
+                |  View
+
+              /## EDIT BUTTON ##
+              = link_to "reports/#{report.id}/edit", class: 'edit-button' do
+                i.fa-solid.fa-user-pen
+                |  Edit
+
+              /## DELETE BUTTON ##
+              a.open-modal.delete-button data-url=hr_staff_path(report)
+                i.fa-solid.fa-trash
+                |  Delete
+
+  /## DASHBOARD BUTTON ##
+  .space-bot-m
+  = link_to '/', class: 'dashboard-button' do
+    i.fa-solid.fa-house
+    |  Back to Dashboard
+
+
+/###############################################################################
+/## MODAL SECTION ##
+/###################
+#deleteModal.modal
+  .modal-content
+    h4.space-bot-xl style="color: black; font-size: 1.2rem" Are you sure you want to delete this Record?
+    .modal-actions
+
+      /## CONFIRM MODAL BUTTON ##
+      = link_to '#', id: 'confirmDelete', class: 'delete-button' do
+        i.fa-solid.fa-thumbs-up
+        |  Yes, Delete
+
+      /## CANCEL MODAL BUTTON ##
+      a.btn.modal-close
+        i.fa-solid.fa-thumbs-down
+        |  No, Cancel
+
+
+/###############################################################################
+/## JAVASCRIPT SECTION ##
+/########################
+javascript:
+    $(document).ready(function () {
+        $('.open-modal').on('click', function (e) {
+            e.preventDefault();
+            const deleteUrl = $(this).data('url');
+            $('#hiddenDeleteForm').attr('action', deleteUrl);
+            $('#deleteModal').show();
+        });
+
+        $('#confirmDelete').on('click', function (e) {
+            e.preventDefault();
+            $('#hiddenDeleteForm').submit();
+        });
+
+        $('.modal-close').on('click', function () {
+            $('#deleteModal').hide();
+        });
+    });
