@@ -2,6 +2,11 @@ class ManagementStaff < ApplicationRecord
   has_many :equipment_inventories
   has_many :reports
   has_one :employee_record, as: :employee
+  # ======================================================================
+  # This validation ensures that both first_name and last_name are present
+  # before saving the model.
+  # ----------------------------------------------------------------------
+  validates :first_name, :last_name, presence: true
 
   #TODO=> SETUP METHODS
   def full_name
