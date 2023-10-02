@@ -12,19 +12,23 @@ class HrStaffsController < ApplicationController
   end
   
   # =======================================================
-  # Initialize a new HR Staff object for the form
+  # Initialize a new Employee object for the form
   # -------------------------------------------------------
   def new
-    @hr_staff = HrStaff.new
+    @employee = params[:type].constantize.new if params[:type].in?(['HrStaff', 'MaintenanceStaff', 'ManagementStaff'])
+    @employee ||= HrStaff.new
   end
+  
   def create
     create_employee
   end
+  
   def create_employee
-    employee_type       = params[:hr_staff].delete(:employee_type).to_sym
+    employee_type       = params[:hr_staff][:type]
     employee_attributes = params.require(:hr_staff).permit(:first_name, :last_name)
     begin
       new_employee = EmployeeFactory.create_employee(employee_type, employee_attributes)
+      
       if new_employee.persisted?
         redirect_to hr_staffs_path, notice: 'Employee was successfully created.'
       else

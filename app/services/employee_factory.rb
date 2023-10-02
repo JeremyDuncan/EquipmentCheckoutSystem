@@ -1,4 +1,3 @@
-
 # ==============================================================================
 # The EmployeeFactory class serves as a factory for creating employee objects.
 # ------------------------------------------------------------------------------
@@ -14,12 +13,12 @@ class EmployeeFactory
   # ----------------------------------------------------------------------------
   def self.create_employee(type, attributes)
     case type
-    when :hr
-      HrStaff.create(attributes)
-    when :maintenance
-      MaintenanceStaff.create(attributes)
-    when :management
-      ManagementStaff.create(attributes)
+    when 'HrStaff'
+      HrStaff.create!(attributes)
+    when 'MaintenanceStaff'
+      MaintenanceStaff.create!(attributes)
+    when 'ManagementStaff'
+      ManagementStaff.create!(attributes)
     else
       raise "Invalid employee type"
     end
