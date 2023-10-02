@@ -2,12 +2,12 @@
   #alert
 
 .container.col
-  h1.space-bot-xl Add Staff Member
+  h1.space-bot-xl Add Employee
   i.fa-solid.fa-user-plus.space-bot-xl style="font-size: 7rem;"
   = form_with(model: @employee, url: create_employee_path, local: true, class: 'form-container') do |f|
     = f.hidden_field :type, id: 'employee_type_hidden'
     .form-group
-      = label_tag :employee_type, 'Employee Type', class: 'form-label'
+      = label_tag :employee_type, 'Employee Role', class: 'form-label'
       br
       = select_tag :employee_type, 
               options_for_select([['Select Type', ''],
