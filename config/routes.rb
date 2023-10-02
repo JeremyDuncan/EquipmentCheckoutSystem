@@ -26,4 +26,6 @@ Rails.application.routes.draw do
       post :create_employee
     end
   end
+  
+  post 'create_employee', to: 'hr_staffs#create_employee'
 end
