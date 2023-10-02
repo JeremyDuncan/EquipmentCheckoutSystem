@@ -2,41 +2,47 @@ form#hiddenDeleteForm method="post" style="display:none;"
   input type="hidden" name="_method" value="delete"
   input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
 
-.container.col  
-  h1.space-bot-xl HR Employees
+.container.col
+  h1 Human Resources
   i.fa-solid.fa-user-tie.space-bot-xl style="font-size: 7rem;"
   = link_to "hr_staffs/new", class: 'add-button' do
     i.fa-solid.fa-user-plus
-    |  Add HR Employee'
-  .space-bot-s 
+    |  Add Employee
+  .space-bot-s
+  h2 Employee Roster
   table.dark-table
     thead
       tr
         th First Name
         th Last Name
+        th Role
         th Actions
     tbody
-      - @hr_staffs.each do |staff|
-        tr
-          td = staff.first_name
-          td = staff.last_name
-          td
-            .container.no-pad
-              
-              /## VIEW BUTTON ##  
-              = link_to "hr_staffs/#{staff.id}",class: 'view-button' do
-                i.fa-regular.fa-id-card
-                |  View
-                
-              /## EDIT BUTTON ##    
-              = link_to "hr_staffs/#{staff.id}/edit", class: 'edit-button' do
-                i.fa-solid.fa-user-pen
-                |  Edit
-                
-              /## DELETE BUTTON ##  
-              a.open-modal.delete-button data-url=hr_staff_path(staff) 
-                i.fa-solid.fa-trash
-                |  Delete   
+      - @all_staffs.each do |type, staffs|
+        - puts "_____________________"
+        - puts  staffs.inspect
+        - staffs.each do |staff|
+          tr
+            td = staff.first_name
+            td = staff.last_name
+            td = staff.class.name
+            td
+              .container.no-pad
+
+                /## VIEW BUTTON ##
+                = link_to "#{type}/#{staff.id}", class: 'view-button' do
+                  i.fa-regular.fa-id-card
+                  |  View
+
+                /## EDIT BUTTON ##
+                = link_to "#{type}/#{staff.id}/edit", class: 'edit-button' do
+                  i.fa-solid.fa-user-pen
+                  |  Edit
+
+                /## DELETE BUTTON ##
+                a.open-modal.delete-button data-url=send("#{type.to_s.singularize}_path", staff)
+                  i.fa-solid.fa-trash
+                  |  Delete
                 
   /## DASHBOARD BUTTON ## 
   .space-bot-m              

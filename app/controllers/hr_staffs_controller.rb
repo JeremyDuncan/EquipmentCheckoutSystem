@@ -1,7 +1,14 @@
 class HrStaffsController < ApplicationController
 
   def index
-    @hr_staffs = HrStaff.all
+    @hr_staffs          = HrStaff.all
+    @maintenance_staffs = MaintenanceStaff.all
+    @management_staffs  = ManagementStaff.all
+    @all_staffs = {
+      hr_staffs:          @hr_staffs,
+      maintenance_staffs: @maintenance_staffs,
+      management_staffs:  @management_staffs
+    }
   end
   
   # =======================================================
