@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_24_163533) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_012454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,9 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_163533) do
     t.string "first_name"
     t.string "last_name"
     t.string "employee_record_id"
-    t.bigint "equipment_inventory_id"
     t.index ["employee_record_id"], name: "index_maintenance_staffs_on_employee_record_id", unique: true
-    t.index ["equipment_inventory_id"], name: "index_maintenance_staffs_on_equipment_inventory_id"
   end
 
   create_table "management_staffs", force: :cascade do |t|
@@ -71,10 +69,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_163533) do
     t.bigint "management_staffs_id"
     t.string "date_range"
     t.string "metrics_included"
+    t.bigint "maintenance_staffs_id"
+    t.integer "check_in_status"
     t.index ["management_staffs_id"], name: "index_reports_on_management_staffs_id"
   end
 
   add_foreign_key "equipment_inventories", "maintenance_staffs", column: "maintenance_staffs_id"
-  add_foreign_key "maintenance_staffs", "equipment_inventories"
   add_foreign_key "reports", "management_staffs", column: "management_staffs_id"
 end

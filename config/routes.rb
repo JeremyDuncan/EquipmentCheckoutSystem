@@ -10,11 +10,8 @@ Rails.application.routes.draw do
   #################
   resources :maintenance_staffs
   resources :management_staffs
-  resources :hr_staffs
-  resources :equipment_inventories
   resources :employee_records
   resources :reports
-  
   
   ##############################################################################
   ## Custom ROUTES ##
@@ -24,4 +21,11 @@ Rails.application.routes.draw do
       post :toggle_status
     end
   end
+  resources :hr_staffs do
+    collection do
+      post :create_employee
+    end
+  end
+  
+  post 'create_employee', to: 'hr_staffs#create_employee'
 end

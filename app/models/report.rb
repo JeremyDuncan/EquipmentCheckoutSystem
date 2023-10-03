@@ -1,5 +1,6 @@
 class Report < ApplicationRecord
-  belongs_to :management_staff
+  belongs_to :management_staff, foreign_key: 'management_staffs_id'
+  
 
   #TODO=> SETUP METHODS
   # ==================

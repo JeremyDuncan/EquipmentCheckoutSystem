@@ -1,5 +1,5 @@
 class EquipmentInventory < ApplicationRecord
-  belongs_to :maintenance_staff, optional: true
+  # belongs_to :maintenance_staff, optional: true
   belongs_to :management_staff,  optional: true
   # =====================================================================
   # This validation ensures that both equipment_id and equipment_name are 
@@ -43,6 +43,18 @@ class EquipmentInventory < ApplicationRecord
   # -------------------------------------
   def checked_in?
     status == 0
+  end
+  
+  def name
+    equipment_name
+  end
+  
+  def serial
+    equipment_id
+  end
+  
+  def checked_out_by
+    MaintenanceStaff.find(maintenance_staffs_id).full_name
   end
   
 end

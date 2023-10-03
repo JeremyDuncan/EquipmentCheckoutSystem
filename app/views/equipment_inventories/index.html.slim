@@ -41,17 +41,18 @@ form#hiddenDeleteForm method="post" style="display:none;"
           td
             .container.no-pad
               = link_to "equipment_inventories/#{equipment.id}", class: 'view-button' do
-                i.fa-solid.fa-eye
-                |  View
-                
+                div.no-wrap
+                  i.fa-solid.fa-eye
+                  |  View
               = link_to "equipment_inventories/#{equipment.id}/edit", class: 'edit-button' do 
-                i.fa-solid.fa-pen-to-square
-                |  Edit
-                
+                div.no-wrap
+                  i.fa-solid.fa-pen-to-square
+                  |  Edit
               /## DELETE BUTTON ##  
               a.open-modal.delete-button data-url=equipment_inventory_path(equipment)
-                i.fa-solid.fa-trash
-                |  Delete   
+                div.no-wrap
+                  i.fa-solid.fa-trash
+                  |  Delete
                 
   /## DASHBOARD BUTTON ## 
   .space-bot-m              
@@ -78,6 +79,15 @@ form#hiddenDeleteForm method="post" style="display:none;"
         i.fa-solid.fa-thumbs-down
         |  No, Cancel 
     
+
+style
+  |
+    .sortable { cursor: pointer;}
+    .no-wrap {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     
 /###############################################################################
 /## JAVASCRIPT SECTION ##

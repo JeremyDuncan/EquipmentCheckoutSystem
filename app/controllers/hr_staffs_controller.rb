@@ -1,27 +1,43 @@
 class HrStaffsController < ApplicationController
 
   def index
-    @hr_staffs = HrStaff.all
+    @hr_staffs          = HrStaff.all
+    @maintenance_staffs = MaintenanceStaff.all
+    @management_staffs  = ManagementStaff.all
+    @all_staffs = {
+      hr_staffs:          @hr_staffs,
+      maintenance_staffs: @maintenance_staffs,
+      management_staffs:  @management_staffs
+    }
   end
   
   # =======================================================
-  # Initialize a new HR Staff object for the form
+  # Initialize a new Employee object for the form
   # -------------------------------------------------------
   def new
-    @hr_staff = HrStaff.new
+    @employee = params[:type].constantize.new if params[:type].in?(['HrStaff', 'MaintenanceStaff', 'ManagementStaff'])
+    @employee ||= HrStaff.new
   end
+  
   def create
-    @hr_staff = HrStaff.new(hr_staff_params)
-    if @hr_staff.save
-      redirect_to hr_staffs_path, notice: 'HR Employee was successfully added.'
-    else
-      flash.now[:alert] = @hr_staff.errors.full_messages.join(", ")
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace('alert', 
-                                                                        partial: 'turbo_layouts/alert', 
-                                                                        locals: { alert: flash.now[:alert] }) }
-        format.html { render :new }
+    create_employee
+  end
+  
+  def create_employee
+    employee_type       = params[:hr_staff][:type]
+    employee_attributes = params.require(:hr_staff).permit(:first_name, :last_name)
+    begin
+      new_employee = EmployeeFactory.create_employee(employee_type, employee_attributes)
+      
+      if new_employee.persisted?
+        redirect_to hr_staffs_path, notice: 'Employee was successfully created.'
+      else
+        flash.now[:alert] = new_employee.errors.full_messages.join(", ")
+        render :new
       end
+    rescue => e
+      flash.now[:alert] = e.message
+      render :new
     end
   end
   

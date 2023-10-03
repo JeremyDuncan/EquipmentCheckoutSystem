@@ -1,0 +1,35 @@
+.equipment-container
+  div.fake-table style="width: 60%"
+    div.fake-table-row.fake-table-header.shrink-h
+      div.fake-table-cell.shrink-h Equipment
+      div.fake-table-cell.shrink-h Info
+    div.fake-table-row.fake-table-body.shrink-h 
+      div.fake-table-cell.shrink-h  Equipment Name
+      div.fake-table-cell.shrink-h  = equipment.equipment_name
+      
+    div.fake-table-row.fake-table-body.shrink-h
+      div.fake-table-cell.shrink-h Equipment ID
+      div.fake-table-cell.shrink-h = equipment.serial
+      
+    div.fake-table-row.fake-table-body.shrink-h
+      div.fake-table-cell.shrink-h Date Added
+      div.fake-table-cell.shrink-h = equipment.created_at.strftime("%d %b %Y") 
+       
+    div.fake-table-row.fake-table-body.shrink-h
+      div.fake-table-cell.shrink-h Status
+      div.fake-table-cell.shrink-h
+        i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
+        - if equipment.checked_in?
+          |  Checked In
+        - else
+          |  Checked Out
+              
+style
+  |
+    .equipment-container {  display: flex; 
+                            flex-direction: column; 
+                            justify-content: center;
+                            align-items: center;
+                            
+                          }
+    .shrink-h {height: 40px; padding: 0px; text-align: center }

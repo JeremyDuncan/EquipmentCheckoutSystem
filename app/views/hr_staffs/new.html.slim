@@ -2,25 +2,50 @@
   #alert
 
 .container.col
-  h1.space-bot-xl Add HR Staff Member
+  h1.space-bot-xl Add Employee
   i.fa-solid.fa-user-plus.space-bot-xl style="font-size: 7rem;"
-  = form_with(model: @hr_staff, local: true, class: 'form-container') do |f|
+  = form_with(model: @employee, url: create_employee_path, local: true, class: 'form-container') do |f|
+    = f.hidden_field :type, id: 'employee_type_hidden'
+    .form-group
+      = label_tag :employee_type, 'Employee Role', class: 'form-label'
+      br
+      = select_tag :employee_type, 
+              options_for_select([['Select Type', ''],
+                                  ['Human Resources', 'HrStaff'], 
+                                  ['Maintenance', 'MaintenanceStaff'], 
+                                  ['Management', 'ManagementStaff']]), 
+                                  class: 'form-input', 
+                                  id:    'employee_type_select'
     .form-group
       = f.label      :first_name, class: 'form-label'
       = f.text_field :first_name, class: 'form-input'
-    
     .form-group
-      = f.label      :last_name, class: 'form-label'
-      = f.text_field :last_name, class: 'form-input'
-    
+      = f.label      :last_name,  class: 'form-label'
+      = f.text_field :last_name,  class: 'form-input'
     .form-actions
-      /## ADD BUTTON ## 
       button.btn.btn-primary type="submit"
         i.fa-solid.fa-plus
-        |  Add HR Employee
-        
+        |  Add Employee
+
   .navigation
     /## BACK BUTTON ##
     = link_to '/hr_staffs', class: "btn btn-secondary" do
       i.fa-solid.fa-chevron-left
-      |  Back  
+      |  Back
+
+javascript:
+  $(document).ready(function() {
+    $('#employee_type_select').change(function() {
+      $('#employee_type_hidden').val($(this).val());
+    });
+  });
+
+style
+  | 
+    #employee_type_select {
+      background-color:#333; 
+      border-radius: 5px; 
+      color: white; 
+      width: 245px;
+      height: 40px; 
+    }

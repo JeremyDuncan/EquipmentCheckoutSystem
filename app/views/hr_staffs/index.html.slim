@@ -2,41 +2,54 @@ form#hiddenDeleteForm method="post" style="display:none;"
   input type="hidden" name="_method" value="delete"
   input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
 
-.container.col  
-  h1.space-bot-xl HR Employees
+.container.col 
+  h1 Human Resources
   i.fa-solid.fa-user-tie.space-bot-xl style="font-size: 7rem;"
   = link_to "hr_staffs/new", class: 'add-button' do
     i.fa-solid.fa-user-plus
-    |  Add HR Employee'
-  .space-bot-s 
-  table.dark-table
+    |  Add Employee
+  .space-bot-s
+  h2 Employee Roster
+  table.dark-table style="width: 900px"
     thead
       tr
-        th First Name
-        th Last Name
+        th.sortable data-sort="first_name" 
+          | First Name 
+          i.fa.fa-sort
+        th.sortable data-sort="last_name"  
+          | Last Name 
+          i.fa.fa-sort
+        th.sortable data-sort="role"       
+          | Role 
+          i.fa.fa-sort
+        th.sortable data-sort="created_at" 
+          | Employment Date 
+          i.fa.fa-sort
         th Actions
+
     tbody
-      - @hr_staffs.each do |staff|
-        tr
-          td = staff.first_name
-          td = staff.last_name
-          td
-            .container.no-pad
-              
-              /## VIEW BUTTON ##  
-              = link_to "hr_staffs/#{staff.id}",class: 'view-button' do
-                i.fa-regular.fa-id-card
-                |  View
-                
-              /## EDIT BUTTON ##    
-              = link_to "hr_staffs/#{staff.id}/edit", class: 'edit-button' do
-                i.fa-solid.fa-user-pen
-                |  Edit
-                
-              /## DELETE BUTTON ##  
-              a.open-modal.delete-button data-url=hr_staff_path(staff) 
-                i.fa-solid.fa-trash
-                |  Delete   
+      - @all_staffs.each do |type, staffs|
+        - staffs.each do |staff|
+          tr data-first_name=staff.first_name data-last_name=staff.last_name data-role=staff.class.name data-created_at=staff.created_at.to_i
+            td = staff.first_name
+            td = staff.last_name
+            td = staff.class.name
+            td = staff.created_at.strftime("%d %b %Y")
+            td
+              .container.no-pad
+                /## VIEW BUTTON ##
+                = link_to "#{type}/#{staff.id}", class: 'view-button' do
+                  i.fa-regular.fa-id-card
+                  |  View
+                /## EDIT BUTTON ##
+                = link_to "#{type}/#{staff.id}/edit", class: 'edit-button' do
+                  i.fa-solid.fa-user-pen
+                  |  Edit
+                /## DELETE BUTTON ##
+                a.open-modal.delete-button data-url=send("#{type.to_s.singularize}_path", staff)
+                  i.fa-solid.fa-trash
+                  |  Delete
+
                 
   /## DASHBOARD BUTTON ## 
   .space-bot-m              
@@ -64,6 +77,12 @@ form#hiddenDeleteForm method="post" style="display:none;"
         |  No, Cancel 
 
 
+
+style
+  |
+    .sortable { cursor: pointer;}
+
+
 /###############################################################################
 /## JAVASCRIPT SECTION ##
 /########################          
@@ -84,4 +103,56 @@ javascript:
         $('.modal-close').on('click', function () {
             $('#deleteModal').hide();
         });
+
+
+        let currentSortKey = null;
+        let sortOrder = 'default';
+
+        // Sorting function
+        $('.sortable').click(function () {
+            const sortKey = $(this).data('sort');
+
+            // Reset other headers if a different header is clicked
+            if (currentSortKey !== sortKey) {
+                $('.sortable').find('i').attr('class', 'fa fa-sort');
+                sortOrder = 'default';
+            }
+
+            // Update sort order
+            if (sortOrder === 'default') {
+                sortOrder = 'asc';
+            } else if (sortOrder === 'asc') {
+                sortOrder = 'desc';
+            } else {
+                sortOrder = 'default';
+            }
+
+            // Update visual indicator
+            $(this).find('i').attr('class', sortOrder === 'default' ? 'fa fa-sort' : `fa fa-sort-${sortOrder}`);
+
+            const rows = $('tbody tr').get();
+            rows.sort(function (a, b) {
+                const A = $(a).data(sortKey).toString().toUpperCase();
+                const B = $(b).data(sortKey).toString().toUpperCase();
+                if (A < B) {
+                    return sortOrder === 'asc' ? -1 : 1;
+                }
+                if (A > B) {
+                    return sortOrder === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+
+            if (sortOrder === 'default') {
+                // Reload original order (you may need to adjust this part based on how you load the original order)
+                location.reload();
+            } else {
+                $.each(rows, function (index, row) {
+                    $('tbody').append(row);
+                });
+            }
+            currentSortKey = sortKey;
+        });
+
+
     });
