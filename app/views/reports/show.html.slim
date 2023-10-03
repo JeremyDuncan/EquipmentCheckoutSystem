@@ -24,8 +24,11 @@
       div.fake-table-cell = ManagementStaff.find(report.management_staffs_id).full_name
 
 h2.center Equipment Report For Maintenance Employee #{@maintenance_staff.full_name}
-- @queried_equipment.each do |equipment|
-  = render partial: 'equipment_report',  locals: {equipment: equipment}
+-if @queried_equipment.present?
+  - @queried_equipment.each do |equipment|
+    = render partial: 'equipment_report',  locals: {equipment: equipment}
+- else
+  h1.center.yellow No Available Data
 
 .container  
   /## BACK BUTTON ##
@@ -35,4 +38,5 @@ h2.center Equipment Report For Maintenance Employee #{@maintenance_staff.full_na
   
 style
   |
-    .center {text-align: center}  
+    .center {text-align: center} 
+    .yellow {color: yellow} 
