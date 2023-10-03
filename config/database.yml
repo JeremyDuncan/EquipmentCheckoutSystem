@@ -14,16 +14,11 @@
 # Configure Using Gemfile
 # gem "pg"
 #
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-development:
-  <<: *default
-  database: EquipmentCheckoutSystem_development
+
+# development:
+#   <<: *default
+#   database: EquipmentCheckoutSystem_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -85,7 +80,24 @@ test:
 #  username: EquipmentCheckoutSystem
 #  password: <%#= ENV["EQUIPMENTCHECKOUTSYSTEM_DATABASE_PASSWORD"] %>
 
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV['DATABASE_URL'] %>
+  
 production:
+  <<: *default
+  database: EquipmentCheckoutSystem_production
+  username: postgres  # Changed to match the default PostgreSQL username
+  password: <%= ENV["POSTGRES_PASSWORD"] %>  # Changed to match the environment variable
+  host: db  # This should match the service name in docker-compose.yml
+  port: 5432  # Default PostgreSQL port
+
+development:
   <<: *default
   database: EquipmentCheckoutSystem_production
   username: postgres  # Changed to match the default PostgreSQL username

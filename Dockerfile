@@ -6,9 +6,14 @@ FROM ruby:3.2.2
 # ==============================================================================
 # Set environment variables
 # ------------------------------------------------------------------------------
+# ENV RAILS_ROOT /var/www/EquipmentCheckoutSystem
+# ENV RAILS_ENV='production'
+# ENV RACK_ENV='production'
+
 ENV RAILS_ROOT /var/www/EquipmentCheckoutSystem
-ENV RAILS_ENV='production'
-ENV RACK_ENV='production'
+ENV RAILS_ENV='development' 
+ENV RACK_ENV='development'  
+
 
 # ==============================================================================
 # Create and set the working directory
@@ -39,9 +44,9 @@ COPY . .
 RUN bundle exec rails assets:precompile
 
 # ==============================================================================
-# Expose port 3000 to the Docker host
+# Expose port 8532 to the Docker host
 # ------------------------------------------------------------------------------
-EXPOSE 3000
+EXPOSE 8532
 
 # ==============================================================================
 # The default command that gets run will start the Puma server
