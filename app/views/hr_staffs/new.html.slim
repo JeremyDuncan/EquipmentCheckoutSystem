@@ -32,13 +32,22 @@
     = link_to '/hr_staffs', class: "btn btn-secondary" do
       i.fa-solid.fa-chevron-left
       |  Back
-
+      
+  .space-bot-xl
+  .demonstration     
+    | Login credentials for newly created employees are:
+    br
+    | Email: first_name.last_name@devry.edu (ex. john.doe@devry.edu)
+    br
+    | Password: 12345678
+    
 javascript:
   $(document).ready(function() {
     $('#employee_type_select').change(function() {
       $('#employee_type_hidden').val($(this).val());
     });
   });
+
 
 style
   | 
@@ -49,3 +58,9 @@ style
       width: 245px;
       height: 40px; 
     }
+    .demonstration {
+      color: grey; 
+      font-size: .8rem; 
+      width: 500px; 
+    }
+    .align-left { text-align: left}

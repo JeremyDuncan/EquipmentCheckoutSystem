@@ -38,8 +38,8 @@ class HrStaffsController < ApplicationController
       
       if new_employee.persisted?
         # Assign default login credentials
-        default_password      = 'default123'
-        new_employee.email    = "#{new_employee.first_name.downcase}.#{new_employee.last_name.downcase}@example.com"
+        default_password      = '12345678'
+        new_employee.email    = "#{new_employee.first_name.downcase}.#{new_employee.last_name.downcase}@devry.edu"
         new_employee.password = default_password
   
         if new_employee.save
