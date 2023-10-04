@@ -34,9 +34,10 @@ style
       font-size: 1.2em;
     }
 
--if current_staff.present?
+- if current_staff.present?
+  - logout_path = Rails.application.routes.url_helpers.send("destroy_#{current_staff.class.name.underscore}_session_path")
   header
-    h2 style="1.1rem; padding: 0px; margin: 0px"
+    h2 style=("font-size: 1.1rem; padding: 0px; margin: 0px")
       | Equipment Checkout System (ECS)
   
     nav.space-top-s
@@ -56,11 +57,15 @@ style
         i.fa.fa-briefcase
         | Management
       = link_to '/reports' do
-        i.fa-solid.fa-file-lines
+        i.fa.fa-file-alt
         | Reports
+      = button_to logout_path, method: :delete do
+        i.fa.fa-sign-out-alt
+        | Logout
 - else
   header
-    h2 style="1.1rem; padding: 0px; margin: 0px"
-      h1 Welcome Guest
+    h2 style=("font-size: 1.1rem; padding: 0px; margin: 0px")
+      | Welcome Guest
+
         
         
