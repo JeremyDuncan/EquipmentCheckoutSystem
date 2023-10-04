@@ -61,9 +61,10 @@ style
         = link_to '/equipment_inventories' do
           i.fa.fa-toolbox
           | Inventory
-        = link_to '/maintenance_staffs' do
-          i.fa.fa-users-cog
-          | Maintenance  
+          
+        / = link_to '/maintenance_staffs' do
+        /   i.fa.fa-users-cog
+        /   | Maintenance  
           
       - if hr_staff?     
         = link_to '/hr_staffs' do

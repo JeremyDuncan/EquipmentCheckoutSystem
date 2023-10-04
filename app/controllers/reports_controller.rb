@@ -9,15 +9,17 @@ class ReportsController < ApplicationController
     @report.generate
   end
   
-  # ==============================================================================
-  # This method handles the creation of a new report. It initializes a new report
-  # object, sets its attributes, and then attempts to save it to the database.
-  # ------------------------------------------------------------------------------
+  # =========================================================================
+  # handles the creation of a new report. It initializes a new report
+  # object, sets its attributes, and then attempts to save it to the database
+  # -------------------------------------------------------------------------
   def create
-    @report = Report.new(report_params.slice(:report_type, :maintenance_staffs_id, :check_in_status, :date_range))
+    @report = Report.new(report_params.slice(:report_type, 
+                                             :maintenance_staffs_id, 
+                                             :check_in_status, 
+                                             :date_range))
+    @report.management_staffs_id = current_management_staff.id if management?
     
-    # Set the default management_staffs_id (replace 1 with the actual ID you want)
-    @report.management_staffs_id = 1
     if @report.save
       # Handle successful save, for example, redirect to the report show page
       redirect_to @report
@@ -48,11 +50,15 @@ class ReportsController < ApplicationController
   end
 
   private
-  # ==============================================================================
-  # This method defines the permitted parameters for creating or updating a report.
-  # ------------------------------------------------------------------------------
+  # ==================================================================
+  # Defines the permitted parameters for creating or updating a report
+  # ------------------------------------------------------------------
   def report_params
-    params.permit(:report_type, :maintenance_staffs_id, :check_in_status, :date_range, :authenticity_token)
+    params.permit(:report_type, 
+                  :maintenance_staffs_id,
+                  :check_in_status, 
+                  :date_range, 
+                  :authenticity_token)
   end
 
   

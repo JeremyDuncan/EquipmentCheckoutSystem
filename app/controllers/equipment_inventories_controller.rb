@@ -11,6 +11,8 @@ class EquipmentInventoriesController < ApplicationController
   end
   def create
     @equipment_inventory = EquipmentInventory.new(equipment_inventory_params)
+    @equipment_inventory.maintenance_staffs_id = current_maintenance_staff.id if maintenance?
+    
     if @equipment_inventory.save
       redirect_to equipment_inventories_path, notice: 'Equipment was successfully added.'
     else
