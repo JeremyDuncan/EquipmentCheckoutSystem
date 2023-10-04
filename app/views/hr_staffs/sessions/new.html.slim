@@ -1,0 +1,63 @@
+.container.col.no-pad
+  h1.space-bot-xl Human Resources Login Portal
+  i.fa-solid.fa-user.space-bot-xl style="font-size: 7rem;"
+
+  = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-container' }) do |f|
+    .form-group
+      = f.label :email, class: 'form-label'
+      = f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-input'
+
+    .form-group
+      = f.label :password, class: 'form-label'
+      = f.password_field :password, autocomplete: "current-password", class: 'form-input'
+
+    - if devise_mapping.rememberable?
+      .form-group.checkbox-group
+        = f.check_box :remember_me, class: 'form-checkbox'
+        = f.label :remember_me
+
+    .form-actions
+      = f.submit 'Login', class: 'btn btn-primary'
+
+  .space-bot-s
+  = render "hr_staffs/shared/links"
+
+
+  .navigation
+    /## BACK BUTTON ##
+    = link_to '/new_user_session', class: "btn btn-secondary" do
+      i.fa-solid.fa-chevron-left
+      |  Back
+  
+
+style
+  |
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px 50px 20px 50px;
+    }
+    .form-group {
+      margin-bottom: 1em;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 0.5em;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.5em;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .form-checkbox {
+      margin: 0;
+    }
+    .form-actions {
+      text-align: center;
+    }

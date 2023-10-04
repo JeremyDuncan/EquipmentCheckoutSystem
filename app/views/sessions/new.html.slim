@@ -1,0 +1,71 @@
+.container.col.no-pad
+  #alert
+
+.container.col
+  h1.space-bot-xl Choose Your Role
+  i.fa-solid.fa-clipboard-user.space-bot-xl style="font-size: 7rem;"
+  = form_with url: "#", local: true, class: 'form-container', id: 'dynamic_login_form' do |f|
+    .form-group
+      = label_tag :staff_type, 'Staff Role', class: 'form-label'
+      br
+      = f.select :staff_type, 
+            options_for_select([['Select Role', ''], 
+                                ['Human Resources', 'hr'], 
+                                ['Maintenance', 'maintenance'], 
+                                ['Management', 'management']]), 
+                                class: 'form-input', 
+                                id: 'staff_type_select'
+
+    .form-actions
+      = f.submit 'Submit', class: 'btn btn-primary'
+    
+  .space-bot-xl  
+  #create_account_link
+    = link_to 'Create New HR Account', new_hr_staff_registration_path, class: "btn btn-secondary"
+  .space-bot-s
+  .demonstration     
+    | This button is to facilitate demonstrating the App's capabilities.
+
+
+        
+style
+  |
+    #staff_type {
+      border-radius: 5px; 
+      width:         235px;
+      height:        40px; 
+      font-weight:   bold;
+    }
+    .demonstration {color: grey; font-size: .8rem; width: 200px}
+        
+javascript:
+    $(document).ready(function () {
+        $('#staff_type').change(function () {
+            console.log("Changed")
+            const selectedType = $(this).val();
+            
+            console.log("selectedType => ", selectedType)
+
+            let actionPath;
+
+            switch (selectedType) {
+                case 'hr':
+                    actionPath = "/hr_staffs/sign_in";
+                    break;
+                case 'maintenance':
+                    actionPath = "/maintenance_staffs/sign_in";
+                    break;
+                case 'management':
+                    actionPath = "/management_staffs/sign_in";
+                    break;
+                default:
+                    actionPath = "#";
+            }
+
+            $('#dynamic_login_form').attr('action', actionPath);
+
+            // Add a log to see the updated action
+            console.log('Form action updated to:', $('#dynamic_login_form').attr('action'));
+        });
+    });
+

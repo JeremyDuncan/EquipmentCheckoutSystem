@@ -12,4 +12,38 @@ html
     script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"
   body.dark-mode
     = render "/layouts/header"
-    = yield
+    main#content
+      = yield
+    = render "/layouts/footer"
+    
+
+style
+  |
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main#content {
+      flex: 1;
+    }
+
+    footer {
+      background-color: #222;
+      padding: .5em;
+      text-align: center;
+      font-size: 1.1em;
+      width: 100%;
+    }
+
+    footer p {
+      color: white;
+      margin: 0;
+      padding: 0.2em 0;
+    }
+
+    footer .tech-stack {
+      font-size: 0.9em;
+      margin-top: 0.5em;
+    }    
