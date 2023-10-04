@@ -1,6 +1,7 @@
 class EquipmentInventoriesController < ApplicationController
   def index
-    @equipment_inventories = EquipmentInventory.all
+    @equipment_inventories = EquipmentInventory.where(deleted: false)
+    @removed_equipment     = EquipmentInventory.where(deleted: true)
   end
   
   # =======================================================
@@ -12,8 +13,12 @@ class EquipmentInventoriesController < ApplicationController
   def create
     @equipment_inventory = EquipmentInventory.new(equipment_inventory_params)
     @equipment_inventory.maintenance_staffs_id = current_maintenance_staff.id if maintenance?
+    @equipment_inventory.last_checked_in_by = current_staff.full_name
+    @equipment_inventory.last_checked_in_at = Time.now
     
     if @equipment_inventory.save
+      record_movement('created')
+      
       redirect_to equipment_inventories_path, notice: 'Equipment was successfully added.'
     else
       flash.now[:alert] = @equipment_inventory.errors.full_messages.join(", ")
@@ -32,6 +37,7 @@ class EquipmentInventoriesController < ApplicationController
   
   def update
     @equipment_inventory = EquipmentInventory.find(params[:id])
+  
     if @equipment_inventory.update(equipment_inventory_params)
       redirect_to equipment_inventories_path, notice: 'Equipment was successfully updated.'
     else
@@ -61,9 +67,15 @@ class EquipmentInventoriesController < ApplicationController
   def toggle_status
     @equipment_inventory = EquipmentInventory.find(params[:id])
     if @equipment_inventory.checked_in?
-      @equipment_inventory.update(status: 1) # Checked out
+      @equipment_inventory.update(status: 1, 
+                                   last_checked_out_by: current_staff.full_name,
+                                   last_checked_out_at: Time.now) # Checked out
+      record_movement('check_out')
     else
-      @equipment_inventory.update(status: 0) # Checked in
+      @equipment_inventory.update(status: 0, 
+                                   last_checked_in_by: current_staff.full_name,
+                                   last_checked_in_at: Time.now) # Checked in
+      record_movement('check_in')
     end
     render json: { status: @equipment_inventory.status }
   end
@@ -80,14 +92,38 @@ class EquipmentInventoriesController < ApplicationController
   # ----------------------------------------------------------------------------
   def destroy
     @equipment_inventory = EquipmentInventory.find(params[:id])
-    @equipment_inventory.destroy
-    redirect_to equipment_inventories_path, notice: 'Equipment was successfully deleted.'
+    @equipment_inventory.update(deleted: true)
+    record_movement('deleted')
+    redirect_to equipment_inventories_path, notice: 'Equipment was successfully marked as deleted.'
   end
+
+  def restore
+    @equipment_inventory = EquipmentInventory.find(params[:id])
+    @equipment_inventory.update(deleted: false)
+    record_movement('restored')
+    redirect_to equipment_inventories_path, notice: 'Equipment was successfully restored.'
+  end
+  
   
   
   private
   def equipment_inventory_params
-    params.require(:equipment_inventory).permit(:equipment_name, :equipment_id, :status)
-  end  
+    # params.require(:equipment_inventory).permit(:equipment_name, :equipment_id, :status)
+    params.require(:equipment_inventory).permit(:equipment_name, 
+                                                :equipment_id, 
+                                                :status, 
+                                                :last_checked_out_by, 
+                                                :last_checked_out_at, 
+                                                :last_checked_in_by, 
+                                                :last_checked_in_at)
+  end
   
+  def record_movement(action)
+    EquipmentMovement.create!(
+      equipment_inventory_id: @equipment_inventory.id,
+      maintenance_staff_id:   current_maintenance_staff&.id,
+      moved_at:               Time.now,
+      action:                 action
+    )
+  end
 end

@@ -53,8 +53,16 @@ class EquipmentInventory < ApplicationRecord
     equipment_id
   end
   
-  def checked_out_by
-    MaintenanceStaff.find(maintenance_staffs_id).full_name
+  def checked_out_name
+    if checked_out?
+      checked_out_by
+    end
+  end
+  
+  def checked_in_name
+    if checked_in?
+      checked_in_by
+    end
   end
   
 end
