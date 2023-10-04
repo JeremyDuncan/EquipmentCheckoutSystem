@@ -1,0 +1,31 @@
+/ ==============================================================================
+/ This adds a sticky footer at the bottom of the screen with the copyright notice.
+/ ------------------------------------------------------------------------------
+style
+  |
+    footer {
+      background-color: #222;
+      padding: .5em;
+      text-align: center;
+      font-size: 1.1em;
+      position: sticky;
+      bottom: 0;
+      z-index: 1000;
+      width: 100%;
+    }
+    footer p {
+      color: white;
+      margin: 0;
+      padding: 0.2em 0;
+    }
+    footer .tech-stack {
+      font-size: 0.9em;
+      margin-top: 0.5em;
+    }
+
+footer
+  p 
+    | © 2023 Equipment Checkout System (ECS)
+  p.tech-stack
+    | Developed with Ruby on Rails, Javascript, jQuery, and Slim
+
