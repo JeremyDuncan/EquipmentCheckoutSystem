@@ -74,4 +74,41 @@ class HrStaffsController < ApplicationController
   def hr_staff_params
     params.require(:hr_staff).permit(:first_name, :last_name, :role)
   end
+  
+  
+  
+  
+  
+  
+  
+  
+  ##################################################################################
+  ## DEVISE METHODS
+  ################################################################################## 
+  # # ==============================================================================
+  # # This before_action ensures that only HR Staff can access specific actions
+  # # ------------------------------------------------------------------------------
+  # before_action :ensure_hr!, only: [:some_hr_action]
+  #
+  # private
+  #
+  # # ==============================================================================
+  # # This method ensures the current user is HR Staff
+  # # ------------------------------------------------------------------------------
+  # def ensure_hr!
+  #   unless current_staff.is_a? HrStaff
+  #     redirect_to root_path, alert: 'Not authorized'
+  #   end
+  # end
+  #
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 end

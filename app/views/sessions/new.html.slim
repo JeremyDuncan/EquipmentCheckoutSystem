@@ -1,0 +1,51 @@
+.container.col.no-pad
+  #alert
+
+.container.col
+  h1.space-bot-xl Login
+  i.fa-solid.fa-user.space-bot-xl style="font-size: 7rem;"
+  = form_with url: new_user_session_path, local: true, class: 'form-container' do |f|
+    .form-group
+      = label_tag :staff_type, 'Staff Role', class: 'form-label'
+      br
+      = f.select :staff_type, 
+            options_for_select([['Select Role', ''], 
+                                ['Human Resources', 'hr'], 
+                                ['Maintenance', 'maintenance'], 
+                                ['Management', 'management']]), 
+                                class: 'form-input', 
+                                id: 'staff_type_select'
+    .form-group
+      = f.label :email, class: 'form-label'
+      = f.email_field :email, class: 'form-input'
+    .form-group
+      = f.label :password, class: 'form-label'
+      = f.password_field :password, class: 'form-input'
+    .form-actions
+      = f.submit 'Login', class: 'btn btn-primary'
+    
+  .space-bot-xl  
+  #create_account_link
+    = link_to 'Create New HR Account', new_hr_staff_registration_path, class: "btn btn-secondary"
+  .space-bot-s
+  .demonstration     
+    | This button is to facilitate demonstrating the App's capabilities.
+
+
+        
+style
+  |
+    #staff_type {
+      border-radius: 5px; 
+      width:         235px;
+      height:        40px; 
+      font-weight:   bold;
+    }
+    .demonstration {color: grey; font-size: .8rem; width: 200px}
+        
+javascript:
+    $(document).ready(function () {
+        $('#staff_type_select').change(function () {
+            $('#staff_type_hidden').val($(this).val());
+        });
+    });

@@ -2,6 +2,16 @@
   h1 Dashboard
   h2 Choose an Option
 
+  - if current_staff.is_a? HrStaff
+    h1 Welcome HR Staff
+  - elsif current_staff.is_a? ManagementStaff
+    h1 Welcome Management
+  - elsif current_staff.is_a? MaintenanceStaff
+    h1 Welcome Maintenance Staff
+  - else
+    h1 Welcome Guest
+
+
   /## EQUIPMENT INVENTORY BUTTON ##
   = link_to '/equipment_inventories', class: "btn" do
     i.fa.fa-toolbox

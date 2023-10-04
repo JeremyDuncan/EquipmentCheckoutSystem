@@ -34,29 +34,33 @@ style
       font-size: 1.2em;
     }
 
-header
-  h2 style="1.1rem; padding: 0px; margin: 0px"
-    | Equipment Checkout System (ECS)
-
-  nav.space-top-s
-    = link_to '/' do
-      i.fa.fa-home
-      | Dashboard
-    = link_to '/equipment_inventories' do
-      i.fa.fa-toolbox
-      | Inventory
-    = link_to '/hr_staffs' do
-      i.fa.fa-user-tie
-      | HR
-    = link_to '/maintenance_staffs' do
-      i.fa.fa-users-cog
-      | Maintenance
-    = link_to '/management_staffs' do
-      i.fa.fa-briefcase
-      | Management
-    = link_to '/reports' do
-      i.fa-solid.fa-file-lines
-      | Reports
-    
+-if current_staff.present?
+  header
+    h2 style="1.1rem; padding: 0px; margin: 0px"
+      | Equipment Checkout System (ECS)
+  
+    nav.space-top-s
+      = link_to '/' do
+        i.fa.fa-home
+        | Dashboard
+      = link_to '/equipment_inventories' do
+        i.fa.fa-toolbox
+        | Inventory
+      = link_to '/hr_staffs' do
+        i.fa.fa-user-tie
+        | HR
+      = link_to '/maintenance_staffs' do
+        i.fa.fa-users-cog
+        | Maintenance
+      = link_to '/management_staffs' do
+        i.fa.fa-briefcase
+        | Management
+      = link_to '/reports' do
+        i.fa-solid.fa-file-lines
+        | Reports
+- else
+  header
+    h2 style="1.1rem; padding: 0px; margin: 0px"
+      h1 Welcome Guest
         
         

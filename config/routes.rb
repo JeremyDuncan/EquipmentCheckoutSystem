@@ -6,6 +6,18 @@ Rails.application.routes.draw do
   root "dashboard#index"
   
   ##############################################################################
+  ## DEVISE ROUTES ##
+  ###################
+  # devise_for :hr_staffs
+  devise_for :management_staffs
+  devise_for :maintenance_staffs
+  devise_for :hr_staffs, controllers: { registrations: 'hr_staffs/registrations' }
+  
+  
+  get 'new_user_session' => 'sessions#new', as: :new_user_session
+
+  
+  ##############################################################################
   ## MAIN ROUTES ##
   #################
   resources :maintenance_staffs
