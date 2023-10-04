@@ -1,41 +1,40 @@
 .container.col
-  h1 Dashboard
-  h2 Choose an Option
-
-  - if current_staff.is_a? HrStaff
-    h1 Welcome HR Staff
-  - elsif current_staff.is_a? ManagementStaff
-    h1 Welcome Management
-  - elsif current_staff.is_a? MaintenanceStaff
-    h1 Welcome Maintenance Staff
+  - if hr_staff?
+    h1 Human Resources Dashboard
+    i.fa.fa-user-tie.big
+  - elsif management?
+    h1 Management Dashboard
+    i.fa.fa-briefcase.big
+  - elsif maintenance?
+    h1 Maintenance Dashboard
+    i.fa.fa-toolbox.big
   - else
     h1 Welcome Guest
 
-
+  h2 Choose an Option
+  
   /## EQUIPMENT INVENTORY BUTTON ##
-  = link_to '/equipment_inventories', class: "btn" do
-    i.fa.fa-toolbox
-    |   Equipment Inventory
+  - if maintenance?  
+    = link_to '/equipment_inventories', class: "btn" do
+      i.fa.fa-toolbox
+      |   Equipment Inventory
+      
+  - if hr_staff?
+    /## HR STAFF BUTTON ##
+    = link_to '/hr_staffs', class: "btn" do
+      i.fa.fa-user-tie
+      |  Employee Roster
 
-  /## HR STAFF BUTTON ##
-  = link_to '/hr_staffs', class: "btn" do
-    i.fa.fa-user-tie
-    |   Human Resources
-
-  /## MAINTENANCE STAFF BUTTON ##
-  = link_to '/maintenance_staffs', class: "btn" do
-    i.fa.fa-users-cog
-    |   Maintenance Staff
-
-  /## MANAGEMENT STAFF BUTTON ##
-  = link_to '/management_staffs',  class: "btn" do
-    i.fa.fa-briefcase
-    |   Management Staff
-
-  /## MANAGEMENT STAFF BUTTON ##
-  = link_to '/reports', class: "btn" do
-    i.fa-solid.fa-file-lines
-    |   Reports
+  -if management?
+    /## MANAGEMENT STAFF BUTTON ##
+    = link_to '/management_staffs',  class: "btn" do
+      i.fa.fa-briefcase
+      |   Management Staff
+      
+    /## MANAGEMENT STAFF BUTTON ##
+    = link_to '/reports', class: "btn" do
+      i.fa-solid.fa-file-lines
+      |   Reports
 
 style
   |
