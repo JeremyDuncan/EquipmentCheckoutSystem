@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   # This before action will redirect to the appropriate login page if the 
   # user is not authenticated.
   # ---------------------------------------------------------------------
-  before_action :authenticate_user
+  before_action :authenticate_user, unless: :devise_controller?
   include Devise::Controllers::Helpers
   include ConsoleColors
   

@@ -23,14 +23,31 @@ class HrStaffsController < ApplicationController
     create_employee
   end
   
+  # ============================================================================
+  # Creates a new employee using the EmployeeFactory, assigns default login
+  # credentials for the first time, and redirects or renders errors accordingly
+  # ============================================================================
   def create_employee
     employee_type       = params[:hr_staff][:type]
-    employee_attributes = params.require(:hr_staff).permit(:first_name, :last_name)
+    employee_attributes = params.require(:hr_staff).permit(:first_name, :last_name, :type)
+    employee_attributes = employee_attributes.except(:type) # Remove :type
+  
     begin
+      # Create employee using EmployeeFactory
       new_employee = EmployeeFactory.create_employee(employee_type, employee_attributes)
       
       if new_employee.persisted?
-        redirect_to hr_staffs_path, notice: 'Employee was successfully created.'
+        # Assign default login credentials
+        default_password      = 'default123'
+        new_employee.email    = "#{new_employee.first_name.downcase}.#{new_employee.last_name.downcase}@example.com"
+        new_employee.password = default_password
+  
+        if new_employee.save
+          redirect_to hr_staffs_path, notice: 'Employee was successfully created.'
+        else
+          flash.now[:alert] = new_employee.errors.full_messages.join(", ")
+          render :new
+        end
       else
         flash.now[:alert] = new_employee.errors.full_messages.join(", ")
         render :new
