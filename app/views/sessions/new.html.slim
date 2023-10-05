@@ -28,9 +28,23 @@
   .space-bot-s
   .demonstration     
     | This button is to facilitate demonstrating the App's capabilities.
+    br
+    | Create a HR account then add employees. 
+    br
+    | Login with employee credentials to explore the app functionality.  
 
-
-        
+#floating-modal
+  .modal-content
+    = image_tag 'devry_logo.png', alt: 'Devry Logo', class: 'modal-image'
+    h2 Project Demonstration 
+    h3 DeVry University 
+    h3 Class CEIS400
+    | Create a HR account then add employees. 
+    br
+    | Login with employee credentials to explore the app functionality.  
+    .space-bot-l
+    button#close-modal OK
+         
 style
   |
     #staff_type {
@@ -40,6 +54,55 @@ style
       font-weight:   bold;
     }
     .demonstration {color: grey; font-size: .8rem; width: 200px}
+    #floating-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      animation: float 3s infinite ease-in-out;
+    }
+    #close-modal {
+      width: 100px;
+      height: 50px;
+      border-radius: 25px; /* Rounded corners */
+      background-color: #007bff; /* Blue background */
+      color: white; /* White text */
+      font-size: 16px; /* Larger font size */
+      border: none; /* Remove border */
+      cursor: pointer; /* Hand cursor on hover */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+      transition: all 0.3s ease; /* Transition for smooth hover effect */
+    }
+    
+    #close-modal:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Larger box shadow on hover */
+    }
+    #close-modal:active {
+      background-color: #004085; /* Even darker blue when clicked */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Smaller box shadow when clicked */
+      transform: scale(0.95); /* Slightly scale down when clicked */
+    }
+    .modal-content {
+      background-color: #7794a7;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 19px 11px rgb(234 234 234 / 39%);
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(-50%, -50%) translateY(0px);
+      }
+      50% {
+        transform: translate(-50%, -50%) translateY(-20px);
+      }
+      100% {
+        transform: translate(-50%, -50%) translateY(0px);
+      }
+    }
+
         
 javascript:
     $(document).ready(function () {
@@ -69,6 +132,9 @@ javascript:
 
             // Add a log to see the updated action
             console.log('Form action updated to:', $('#dynamic_login_form').attr('action'));
+        });
+        $('#close-modal').click(function () {
+            $('#floating-modal').hide();
         });
     });
 
