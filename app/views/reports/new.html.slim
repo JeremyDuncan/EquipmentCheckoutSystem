@@ -4,17 +4,21 @@
 .container.col
   h1.space-bot-xl Generate Report
   i.fa-solid.fa-file-lines.space-bot-xl style="font-size: 7rem;"
-  = form_with(url: reports_path, method: :post, local: true, class: 'form-container', id: 'report_form') do |f|
+    / = form_with(url: reports_path, method: :post, local: true, class: 'form-container', id: 'report_form') do |f|
+  = form_with(model: @report, local: true, class: 'form-container', id: 'report_form') do |f|
     .form-group
       = f.label  :report_type, class: 'form-label'
       = f.select :report_type, 
-              ['Monthly', 
-               'Weekly', 
-               'Daily', 
-               'Custom'], 
+              ['Checked In', 
+               'Checked Out', 
+               'All', 
+               'Removed'], 
               {}, 
               { id: 'report_type', 
                 class: 'form-input' }
+      
+      
+      
   
     .form-group
       = f.label      :start_date, 'Start Date', class: 'form-label'
@@ -26,13 +30,12 @@
         
     .form-group
       = f.label             :maintenance_staffs_id, 'Maintenance Staff', class: 'form-label'
-      = f.collection_select :maintenance_staffs_id, MaintenanceStaff.all, :id, :full_name, {}, class: 'form-input'  
-      
-    .form-group
-      = f.label   :check_in_status, class: 'form-label'
-      = f.select  :check_in_status, [['Checked In', 0], ['Checked Out', 1]], {}, class: 'form-input'
-      
-    = f.hidden_field :date_range, id: 'date_range'
+      = f.collection_select :maintenance_staffs_id, 
+                             MaintenanceStaff.all, 
+                             :id, 
+                             :full_name, 
+                             { include_blank: 'All' }, 
+                             class: 'form-input'
 
     .form-actions
       button.btn.btn-primary type="submit"
@@ -43,67 +46,4 @@
     = link_to '/maintenance_staffs', class: "btn btn-secondary" do
       i.fa-solid.fa-chevron-left
       |  Back
-
-javascript:
-    $(document).ready(function () {
-        console.log('Script loaded');  // Debugging line to ensure the script is loaded
-        const $reportType = $('#report_type');
-        const $startDate = $('#start_date');
-        const $endDate = $('#end_date');
-
-        function setDateFieldsBasedOnReportType(reportType) {
-            const today = new Date();
-            const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
-
-            switch (reportType) {
-                case 'Monthly':
-                    $startDate.val(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`);
-                    $endDate.val(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${lastDayOfMonth.getDate()}`);
-                    break;
-                case 'Weekly':
-                    $startDate.val(`${oneWeekAgo.getFullYear()}-${String(oneWeekAgo.getMonth() + 1).padStart(2, '0')}-${String(oneWeekAgo.getDate()).padStart(2, '0')}`);
-                    $endDate.val(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
-                    break;
-                case 'Daily':
-                    $startDate.val(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
-                    $endDate.val(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
-                    break;
-            }
-        }
-        // Set default date fields when the page loads
-        setDateFieldsBasedOnReportType($reportType.val());
-
-        // Update date fields based on report type when it changes
-        $reportType.change(function () {
-            setDateFieldsBasedOnReportType($(this).val());
-        });
-
-        // Set report type to 'Custom' if date fields are manually changed
-        $startDate.change(function () {
-            $reportType.val('Custom');
-        });
-
-        $endDate.change(function () {
-            $reportType.val('Custom');
-        });
-
-
-        // Listen for the form submission
-        $('#report_form').on('submit', function (e) {
-            const startDate = $('#start_date').val();
-            const endDate = $('#end_date').val();
-            const dateRangeStr = `${startDate} to ${endDate}`;
-
-            // Set the hidden date_range field
-            $('#date_range').val(dateRangeStr);
-
-            // Disable start_date and end_date fields so they won't be sent
-            $('#start_date').prop('disabled', true);
-            $('#end_date').prop('disabled', true);
-        });
-        
-        
-        
-    });
 

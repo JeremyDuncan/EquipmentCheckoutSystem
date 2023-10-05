@@ -18,6 +18,22 @@ class ApplicationController < ActionController::Base
   helper_method :current_staff
   
   
+  def hr_staff?
+    current_staff.is_a? HrStaff
+  end
+
+  def maintenance?
+    current_staff.is_a? MaintenanceStaff
+  end
+
+  def management?
+    current_staff.is_a? ManagementStaff
+  end
+  helper_method :hr_staff?, :maintenance?, :management?
+  
+  
+  
+  
   private
   def authenticate_user
     if current_staff.nil?

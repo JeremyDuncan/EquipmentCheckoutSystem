@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_03_225425) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_05_002539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,7 +32,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_225425) do
     t.string "equipment_id"
     t.integer "status", default: 0
     t.bigint "maintenance_staffs_id"
+    t.string "last_checked_out_by"
+    t.datetime "last_checked_out_at"
+    t.string "last_checked_in_by"
+    t.datetime "last_checked_in_at"
+    t.boolean "deleted", default: false
     t.index ["maintenance_staffs_id"], name: "index_equipment_inventories_on_maintenance_staffs_id"
+  end
+
+  create_table "equipment_movements", force: :cascade do |t|
+    t.bigint "equipment_inventory_id", null: false
+    t.bigint "maintenance_staff_id", null: false
+    t.datetime "moved_at", null: false
+    t.string "action", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["equipment_inventory_id"], name: "index_equipment_movements_on_equipment_inventory_id"
+    t.index ["maintenance_staff_id"], name: "index_equipment_movements_on_maintenance_staff_id"
   end
 
   create_table "hr_staffs", force: :cascade do |t|
@@ -88,13 +104,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_225425) do
     t.datetime "updated_at", null: false
     t.string "report_type"
     t.bigint "management_staffs_id"
-    t.string "date_range"
     t.string "metrics_included"
     t.bigint "maintenance_staffs_id"
     t.integer "check_in_status"
+    t.date "start_date"
+    t.date "end_date"
     t.index ["management_staffs_id"], name: "index_reports_on_management_staffs_id"
   end
 
   add_foreign_key "equipment_inventories", "maintenance_staffs", column: "maintenance_staffs_id"
+  add_foreign_key "equipment_movements", "equipment_inventories"
+  add_foreign_key "equipment_movements", "maintenance_staffs"
   add_foreign_key "reports", "management_staffs", column: "management_staffs_id"
 end

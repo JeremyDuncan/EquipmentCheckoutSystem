@@ -9,15 +9,30 @@ class ReportsController < ApplicationController
     @report.generate
   end
   
-  # ==============================================================================
-  # This method handles the creation of a new report. It initializes a new report
-  # object, sets its attributes, and then attempts to save it to the database.
-  # ------------------------------------------------------------------------------
+  def new
+    @report = Report.new
+  end
+  
+  # =========================================================================
+  # handles the creation of a new report. It initializes a new report
+  # object, sets its attributes, and then attempts to save it to the database
+  # -------------------------------------------------------------------------
   def create
-    @report = Report.new(report_params.slice(:report_type, :maintenance_staffs_id, :check_in_status, :date_range))
+    @report = Report.new(report_params)
+    @report.management_staffs_id = current_management_staff.id if management?
     
-    # Set the default management_staffs_id (replace 1 with the actual ID you want)
-    @report.management_staffs_id = 1
+    # Set check_in_status based on report_type
+    case @report.report_type
+    when 'Checked In'
+      @report.check_in_status = 0  
+    when 'Checked Out'
+      @report.check_in_status = 1  
+    when 'All'
+      @report.check_in_status = nil
+    when 'Removed'
+      @report.check_in_status = -1  
+    end
+    
     if @report.save
       # Handle successful save, for example, redirect to the report show page
       redirect_to @report
@@ -28,16 +43,42 @@ class ReportsController < ApplicationController
     end
   end
   
+  # ============================================================================
+  # The show action fetches a report based on its ID and then queries the
+  # EquipmentInventory based on the report's parameters. If a parameter is nil,
+  # it is ignored in the query.
+  # ----------------------------------------------------------------------------
   def show
     @report = Report.find(params[:id])
-    debug(@report, "@report")
-    @maintenance_staff = MaintenanceStaff.find(@report[:maintenance_staffs_id])
-    debug(@maintenance_staff, "@maintenance_staff")
+    debug(@report, "report")
+    @queried_equipment = EquipmentInventory.all
+    @equipment_history = EquipmentMovement.all
     
-    @queried_equipment = EquipmentInventory.where(maintenance_staffs_id: @maintenance_staff.id)
-                                           .where(status: @report[:check_in_status])
-                                           .order(created_at: :desc)
+    if @report.maintenance_staffs_id.present?
+      @maintenance_staff = MaintenanceStaff.find(@report.maintenance_staffs_id)
+      @queried_equipment = @queried_equipment.where(maintenance_staffs_id: @maintenance_staff.id)
+    end
+  
+    if @report.check_in_status.present?
+      if @report.check_in_status == -1
+        @queried_equipment = @queried_equipment.where(deleted: true)
+      else
+        @queried_equipment = @queried_equipment.where(status: @report.check_in_status) 
+      end
+    end
     
+    if @report.start_date.present? && @report.end_date.present?
+      start_date  = @report.start_date
+      end_date    = @report.end_date
+      date_column = @report.check_in_status == 0 ? 'last_checked_in_at' : 'last_checked_out_at'
+      @queried_equipment = @queried_equipment.where("#{date_column} BETWEEN ? AND ?", start_date, end_date)
+    end
+    
+    equipment_inventory_ids = @queried_equipment.pluck(:id)
+    @equipment_history = EquipmentMovement
+                           .where(equipment_inventory_id: equipment_inventory_ids)
+                           .order(moved_at: :desc)
+    @queried_equipment = @queried_equipment.order(created_at: :desc)
     debug(@queried_equipment, "@queried_equipment")
   end
   
@@ -48,12 +89,15 @@ class ReportsController < ApplicationController
   end
 
   private
-  # ==============================================================================
-  # This method defines the permitted parameters for creating or updating a report.
-  # ------------------------------------------------------------------------------
+  # ==================================================================
+  # Defines the permitted parameters for creating or updating a report
+  # ------------------------------------------------------------------
   def report_params
-    params.permit(:report_type, :maintenance_staffs_id, :check_in_status, :date_range, :authenticity_token)
+    params.require(:report).permit(:report_type, 
+                                          :maintenance_staffs_id,
+                                          :check_in_status, 
+                                          :start_date, 
+                                          :end_date,
+                                          :authenticity_token)
   end
-
-  
 end
