@@ -8,7 +8,7 @@
 
 # db/seeds.rb
 
-# Helper method to generate random names
+# Helper method to generate random name
 def random_name
   first_names = [
     "John", "Jane", "Emily", "Michael", "Sarah",
@@ -287,81 +287,6 @@ def random_name
   "#{first_names.sample} #{last_names.sample}"
 end
 
-# Helper method to generate random roles
-def random_role
-  roles = ["HR Manager", "HR Assistant", "HR Analyst"]
-  roles.sample
-end
-
-# Helper method to generate random created_at date
-def random_created_at
-  Time.at(rand(Time.parse("2013-10-01 00:00:00 UTC").to_f..Time.parse("2023-10-01 00:00:00 UTC").to_f))
-end
-
-# Create HR Staff
-500.times do
-  name = random_name.split
-  HrStaff.create(
-    first_name: name[0],
-    last_name: name[1],
-    role: random_role,
-    created_at: random_created_at
-  )
-end
-
-# Create Maintenance Staff
-500.times do
-  name = random_name.split
-  MaintenanceStaff.create(
-    first_name: name[0],
-    last_name: name[1],
-    created_at: random_created_at
-  )
-end
-
-# Create Management Staff
-500.times do
-  name = random_name.split
-  ManagementStaff.create(
-    first_name: name[0],
-    last_name: name[1],
-    role: "Regional",
-    created_at: random_created_at
-  )
-end
-
-# Create Employee Records for HR Staff
-HrStaff.all.each do |hr_staff|
-  employee_record = EmployeeRecord.create(
-    employee_id: hr_staff.id,
-    employee_type: "HrStaff",
-    status: 0,
-    last_updated_by: 1,
-  )
-  hr_staff.update(employee_record_id: employee_record.id)
-end
-
-# Do the same for MaintenanceStaff and ManagementStaff
-MaintenanceStaff.all.each do |maintenance_staff|
-  employee_record = EmployeeRecord.create(
-    employee_id: maintenance_staff.id,
-    employee_type: "MaintenanceStaff",
-    status: 0,
-    last_updated_by: 1
-  )
-  maintenance_staff.update(employee_record_id: employee_record.id)
-end
-
-ManagementStaff.all.each do |management_staff|
-  employee_record = EmployeeRecord.create(
-    employee_id: management_staff.id,
-    employee_type: "ManagementStaff",
-    status: 0,
-    last_updated_by: 1
-  )
-  management_staff.update(employee_record_id: employee_record.id)
-end
-
 # Helper method to generate random equipment name
 def random_equipment_name
   equipment_types = [
@@ -412,8 +337,57 @@ def random_equipment_name
     "Vibration Meter", "Video Encoder", "Water Bath", "Water Filter", "Weather Station",
     "Weighing Scale", "Welding Machine", "Wi-Fi Extender", "X-Ray Machine", "Zinc Analyzer"
   ]
-
   equipment_types.sample
+end
+
+
+
+# Helper method to generate random created_at date
+def random_created_at
+  Time.at(rand(Time.parse("2013-10-01 00:00:00 UTC").to_f..Time.parse("2023-10-01 00:00:00 UTC").to_f))
+end
+
+# Create HR Staff
+250.times do |i|
+  name = random_name.split
+  HrStaff.create(
+    first_name: name[0],
+    last_name: name[1],
+    created_at: random_created_at,
+    email: "#{name[0]}.#{name[1]}@devry.edu",
+    password: '12345678',
+    password_confirmation: '12345678'
+  )
+  puts "HrStaff #{i + 1} created."
+  
+end
+
+# Create Maintenance Staff
+250.times do |i|
+  name = random_name.split
+  MaintenanceStaff.create(
+    first_name: name[0],
+    last_name: name[1],
+    created_at: random_created_at,
+    email: "#{name[0]}.#{name[1]}@devry.edu",
+    password: '12345678',
+    password_confirmation: '12345678'
+  )
+  puts "MaintenanceStaff #{i + 1} created."
+end
+
+# Create Management Staff
+250.times do |i|
+  name = random_name.split
+  ManagementStaff.create(
+    first_name: name[0],
+    last_name: name[1],
+    created_at: random_created_at,
+    email: "#{name[0]}.#{name[1]}@devry.edu",
+    password: '12345678',
+    password_confirmation: '12345678'
+  )
+  puts "ManagementStaff #{i + 1} created."
 end
 
 # Helper method to generate random equipment ID
@@ -421,44 +395,66 @@ def random_equipment_id
   "EQP#{SecureRandom.hex(4).upcase}"
 end
 
+
 # Create Equipment Inventory
-500.times do
+1000.times do |i|
   random_maintenance_staff = MaintenanceStaff.order("RANDOM()").first
-  EquipmentInventory.create(
-    equipment_name: random_equipment_name,
-    equipment_id: random_equipment_id,
-    status: rand(2),
+  equipment = EquipmentInventory.create(
+    equipment_name:        random_equipment_name,
+    equipment_id:          random_equipment_id,
+    status:                rand(2),
     maintenance_staffs_id: random_maintenance_staff.id,
-    created_at: random_created_at
+    created_at:            random_created_at,
+    last_checked_in_at:    random_created_at,
+    last_checked_out_at:   random_created_at
   )
+  puts "EquipmentInventory #{i + 1} created."
+  
+  EquipmentMovement.create!(
+    equipment_inventory_id: equipment.id,
+    maintenance_staff_id: random_maintenance_staff.id,
+    moved_at: Time.now,
+    action: 'created'
+  )
+  puts "EquipmentMovement #{i + 1} created."
 end
 
+# ================================================================
+# Helper method to generate random report type and check-in status
+# ----------------------------------------------------------------
+def random_report_type_and_status
+  types = ['Removed', 'Checked In', 'Checked Out', 'All']
+  selected_type = types.sample
+  status = case selected_type
+           when 'Removed'     then -1
+           when 'Checked In'  then 0
+           when 'Checked Out' then 1
+           else nil
+           end
+  [selected_type, status]
+end
+
+
 # Create Reports
-500.times do |i|
-  random_management_staff = ManagementStaff.order("RANDOM()").first
+100.times do |i|
+  random_management_staff  = ManagementStaff.order("RANDOM()").first
   random_maintenance_staff = MaintenanceStaff.order("RANDOM()").first
-  random_check_in_status = [0, 1].sample
-  random_date_range_start = rand(10.years).seconds.ago.strftime("%Y-%m-%d")
-  random_date_range_end = rand(1.year).seconds.from_now.strftime("%Y-%m-%d")
-  random_date_range = "#{random_date_range_start} to #{random_date_range_end}"
+  random_date_range_start  = rand(10.years).seconds.ago.strftime("%Y-%m-%d")
+  random_date_range_end    = rand(1.year).seconds.from_now.strftime("%Y-%m-%d")
+  report_type, status      = random_report_type_and_status
 
   begin
     Report.create!(
-      report_type: "Monthly",
-      management_staffs_id: random_management_staff.id,
+      report_type:           report_type,
+      management_staffs_id:  random_management_staff.id,
       maintenance_staffs_id: random_maintenance_staff.id,
-      check_in_status: random_check_in_status,
-      date_range: random_date_range,
-      metrics_included: "All",
-      created_at: random_created_at
+      check_in_status:       status,
+      start_date:            random_date_range_start,
+      end_date:              random_date_range_end,
+      created_at:            random_created_at
     )
     puts "Report #{i + 1} created."
   rescue => e
     puts "Failed to create Report #{i + 1}: #{e.message}"
   end
 end
-
-# ... (rest of your existing code)
-
-
-

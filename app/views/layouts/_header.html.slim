@@ -61,19 +61,11 @@ style
         = link_to '/equipment_inventories' do
           i.fa.fa-toolbox
           | Inventory
-          
-        / = link_to '/maintenance_staffs' do
-        /   i.fa.fa-users-cog
-        /   | Maintenance  
-          
       - if hr_staff?     
         = link_to '/hr_staffs' do
           i.fa.fa-user-tie
           | HR
-      - if management? 
-        = link_to '/management_staffs' do
-          i.fa.fa-briefcase
-          | Management
+      - if management?
         = link_to '/reports' do
           i.fa.fa-file-alt
           | Reports

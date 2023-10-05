@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_04_123534) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_05_002539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -104,10 +104,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_123534) do
     t.datetime "updated_at", null: false
     t.string "report_type"
     t.bigint "management_staffs_id"
-    t.string "date_range"
     t.string "metrics_included"
     t.bigint "maintenance_staffs_id"
     t.integer "check_in_status"
+    t.date "start_date"
+    t.date "end_date"
     t.index ["management_staffs_id"], name: "index_reports_on_management_staffs_id"
   end
 

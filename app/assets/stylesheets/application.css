@@ -13,3 +13,24 @@
  *= require_tree .
  *= require_self
  */
+
+.table-modern {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    background-color: rgba(128, 128, 128, 0.1); // Slight grey background
+  }
+
+  &th {
+    background-color: rgba(128, 128, 128, 0.2); // Slightly darker grey for header
+  }
+
+  &tr:hover {
+    background-color: rgba(128, 128, 128, 0.3); // Darker grey on hover
+  }
+}
