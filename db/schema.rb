@@ -10,20 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_05_002539) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_05_115218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "employee_records", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "employee_id"
-    t.string "employee_type"
-    t.integer "status", default: 0
-    t.integer "last_updated_by"
-    t.index ["employee_type", "employee_id"], name: "index_employee_records_on_employee_type_and_employee_id"
-    t.index ["last_updated_by"], name: "index_employee_records_on_last_updated_by"
-  end
 
   create_table "equipment_inventories", force: :cascade do |t|
     t.datetime "created_at", null: false
