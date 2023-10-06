@@ -1,34 +1,40 @@
 class EquipmentInventoriesController < ApplicationController
   # ==============================================================================
-  # Fetches equipment inventories based on filters and paginates them.
-  # Handles pagination, initial letter filtering, and status filtering.
+  # This method handles the index action for the EquipmentInventoriesController.
+  # It sets up pagination, applies filters based on the initial letter and status,
+  # and calculates the total number of pages and records.
   # ------------------------------------------------------------------------------
   def index
-    # PaginationS
+    # Pagination
     @page = params[:page].to_i
     @page = 1 if @page.zero?
-    per_page = 50
+    per_page = 25
     offset = (@page - 1) * per_page
 
     # Filtering
     @initial_letter = params[:initial_letter] || 'A'  # Default to 'A'
-    status = params[:status]
+    @status = params[:status]
 
-    @equipment_inventories = EquipmentInventory.where(deleted: false)
+    # Base query
+    base_query = EquipmentInventory.where(deleted: false)
 
     # Apply initial letter filter if present
-    @equipment_inventories = @equipment_inventories.where("equipment_name LIKE ?", "#{@initial_letter}%") if @initial_letter.present?
+    filtered_query = base_query.where("equipment_name LIKE ?", "#{@initial_letter}%") if @initial_letter.present?
 
     # Apply status filter if present
-    @equipment_inventories = @equipment_inventories.where(status: status) if status.present?
+    filtered_query = filtered_query.where(status: @status) if @status.present?
 
     # Calculate total pages for pagination
-    @total_pages = (@equipment_inventories.count.to_f / per_page).ceil
+    @total_pages = (filtered_query.count.to_f / per_page).ceil
 
     # Apply pagination and ordering
-    @equipment_inventories = @equipment_inventories.offset(offset).limit(per_page).order(id: :desc)
+    @equipment_inventories = filtered_query.offset(offset).limit(per_page).order(id: :desc)
+
+    # Set the total number of records based on your current filters
+    @total_records = filtered_query.count
+    @grand_total_records = EquipmentInventory.all.count
   end
-  
+
   # =======================================================
   # Initialize a new EquipmentInventory object for the form
   # -------------------------------------------------------
