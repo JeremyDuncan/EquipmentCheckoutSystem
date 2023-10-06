@@ -1,17 +1,40 @@
 class EquipmentInventoriesController < ApplicationController
+  # ==============================================================================
+  # This method handles the index action for the EquipmentInventoriesController.
+  # It sets up pagination, applies filters based on the initial letter and status,
+  # and calculates the total number of pages and records.
+  # ------------------------------------------------------------------------------
   def index
-    start = params[:start].to_i || 0
-    limit = params[:limit].to_i || 50 # Number of records per request
-  
-    @equipment_inventories = EquipmentInventory.where(deleted: false).offset(start).limit(limit).order(id: :desc)
-    @removed_equipment     = EquipmentInventory.where(deleted: true).offset(start).limit(limit)
-  
-    respond_to do |format|
-      format.html
-      format.json { render json: { equipment: @equipment_inventories, removed_equipment: @removed_equipment } }
-    end
+    # Pagination
+    @page = params[:page].to_i
+    @page = 1 if @page.zero?
+    per_page = 25
+    offset = (@page - 1) * per_page
+
+    # Filtering
+    @initial_letter = params[:initial_letter] || 'A'  # Default to 'A'
+    @status = params[:status]
+
+    # Base query
+    base_query = EquipmentInventory.where(deleted: false)
+
+    # Apply initial letter filter if present
+    filtered_query = base_query.where("equipment_name LIKE ?", "#{@initial_letter}%") if @initial_letter.present?
+
+    # Apply status filter if present
+    filtered_query = filtered_query.where(status: @status) if @status.present?
+
+    # Calculate total pages for pagination
+    @total_pages = (filtered_query.count.to_f / per_page).ceil
+
+    # Apply pagination and ordering
+    @equipment_inventories = filtered_query.offset(offset).limit(per_page).order(id: :desc)
+
+    # Set the total number of records based on your current filters
+    @total_records = filtered_query.count
+    @grand_total_records = EquipmentInventory.all.count
   end
-  
+
   # =======================================================
   # Initialize a new EquipmentInventory object for the form
   # -------------------------------------------------------

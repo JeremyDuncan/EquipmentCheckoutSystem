@@ -1,0 +1,180 @@
+/*### MODERN STYLES ###*/
+.modern-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 15px !important;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.modern-form {
+    background-color: #f3f3f3;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modern-select {
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/*### TABLE STYLES ###*/
+.dark-table th,
+.dark-table td {
+    padding: 16px;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+/*### PAGINATION STYLES ###*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-link {
+    padding: 10px;
+    margin: 5px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.page-link:hover {
+    background-color: #555;
+}
+.letter-filter {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.letter-link {
+    padding: 10px;
+    margin: 5px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.letter-link:hover {
+    background-color: #555;
+}
+.status-filter {
+    margin-top: 20px;
+    text-align: center;
+}
+.active-letter, .active-page {
+    background-color: #007bff;
+    color: white;
+}
+.pagination-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-right: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination-button.active-page {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination-button:hover {
+    background-color: #f1f1f1;
+}
+
+.pagination-button, .prev-button, .next-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-right: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination-button.active-page, .prev-button.active-page, .next-button.active-page {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination-button:hover, .prev-button:hover, .next-button:hover {
+    background-color: #f1f1f1;
+}
+
+.disabled {
+    cursor: not-allowed;
+    background-color: #eee;
+    border-color: #ddd;
+    color: #aaa;
+}
+/* Existing modern-button styles */
+.modern-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 15px !important;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+/* Updated pagination-button, prev-button, next-button styles */
+.pagination-button, .prev-button, .next-button {
+    background-color: #333;
+    border: none;
+    color: white;
+    padding: 5px 15px !important;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+/* Disabled state */
+.pagination-button.disabled, .prev-button.disabled, .next-button.disabled {
+    cursor: default;
+    background-color: #333;
+    color: #737070;
+}
+
+.pagination-button.disabled:hover, .prev-button.disabled:hover, .next-button.disabled:hover {
+    cursor: default;
+    background-color: #333;
+    color: #737070;
+}
+
+/* Active state */
+.pagination-button.active-page, .prev-button.active-page, .next-button.active-page {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Hover state */
+.pagination-button:hover, .prev-button:hover, .next-button:hover {
+    background-color: #555;
+}
