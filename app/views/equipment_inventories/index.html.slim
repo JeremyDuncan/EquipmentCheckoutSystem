@@ -125,7 +125,8 @@ javascript:
         let   isLoading = false; // Flag to indicate if data is currently being loaded
 
         // Modal handling
-        $('.open-modal').on('click', function (e) {
+        $('tbody').on('click', '.open-modal', function (e) {
+            console.log("Open modal clicked");  // Debugging line
             e.preventDefault();
             const deleteUrl = $(this).data('url');
             $('#hiddenDeleteForm').attr('action', deleteUrl);
