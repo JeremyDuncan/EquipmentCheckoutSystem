@@ -1,15 +1,32 @@
 class EquipmentInventoriesController < ApplicationController
+  # ==============================================================================
+  # Fetches equipment inventories based on filters and paginates them.
+  # Handles pagination, initial letter filtering, and status filtering.
+  # ------------------------------------------------------------------------------
   def index
-    start = params[:start].to_i || 0
-    limit = params[:limit].to_i || 50 # Number of records per request
-  
-    @equipment_inventories = EquipmentInventory.where(deleted: false).offset(start).limit(limit).order(id: :desc)
-    @removed_equipment     = EquipmentInventory.where(deleted: true).offset(start).limit(limit)
-  
-    respond_to do |format|
-      format.html
-      format.json { render json: { equipment: @equipment_inventories, removed_equipment: @removed_equipment } }
-    end
+    # PaginationS
+    @page = params[:page].to_i
+    @page = 1 if @page.zero?
+    per_page = 50
+    offset = (@page - 1) * per_page
+
+    # Filtering
+    @initial_letter = params[:initial_letter] || 'A'  # Default to 'A'
+    status = params[:status]
+
+    @equipment_inventories = EquipmentInventory.where(deleted: false)
+
+    # Apply initial letter filter if present
+    @equipment_inventories = @equipment_inventories.where("equipment_name LIKE ?", "#{@initial_letter}%") if @initial_letter.present?
+
+    # Apply status filter if present
+    @equipment_inventories = @equipment_inventories.where(status: status) if status.present?
+
+    # Calculate total pages for pagination
+    @total_pages = (@equipment_inventories.count.to_f / per_page).ceil
+
+    # Apply pagination and ordering
+    @equipment_inventories = @equipment_inventories.offset(offset).limit(per_page).order(id: :desc)
   end
   
   # =======================================================

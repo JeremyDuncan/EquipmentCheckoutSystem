@@ -6,12 +6,27 @@ form#hiddenDeleteForm method="post" style="display:none;"
   h1 Equipment Inventory
   i.fa-solid.fa-toolbox.space-bot-xl style="font-size: 7rem"
 
-  = link_to "equipment_inventories/new", class: 'add-button' do
+  = link_to "equipment_inventories/new", class: 'add-button modern-button' do
     i.fa-solid.fa-wrench
-    |  Add Equipment 
-  br
-  br
-  .table-container style="height: 550px; overflow-y: scroll;"   
+    |  Add Equipment
+
+  /## LETTER FILTER SECTION ##
+  .letter-filter
+    - ('A'..'Z').each do |letter|
+      - active_class = (letter == @initial_letter) ? 'active-letter' : ''
+      a.letter-link href="#" class="#{active_class}" data-letter=letter = letter
+
+
+  /## STATUS FILTER SECTION ##
+  .status-filter
+    label for="status" Filter by status:
+    |&nbsp
+    select#status.form-control.modern-select
+      option value="" All
+      option value="0" Checked In
+      option value="1" Checked Out
+    button#apply_filters.btn.btn-primary.modern-button Apply Filter
+
     table.dark-table style= "width: 1000px"
       thead
         tr
@@ -34,7 +49,7 @@ form#hiddenDeleteForm method="post" style="display:none;"
                   |  OUT
             td
               /## TOGGLE SWITCH ##
-              .center-div style="display: flex; justify-content: center"  
+              .center-div style="display: flex; justify-content: center"
                 .toggle-switch
                   - if equipment.checked_in?
                     input.toggle-switch-checkbox type="checkbox" id="toggle-#{equipment.id}" checked=true data-id=equipment.id data-status="Check Out"
@@ -52,16 +67,28 @@ form#hiddenDeleteForm method="post" style="display:none;"
                   div.no-wrap
                     i.fa-solid.fa-pen-to-square
                     |  Edit
-                /## DELETE BUTTON ##  
+                /## DELETE BUTTON ##
                 a.open-modal.delete-button data-url=equipment_inventory_path(equipment)
                   div.no-wrap
                     i.fa-solid.fa-trash
                     |  Delete
-  /## DASHBOARD BUTTON ## 
-  .space-bot-m              
-  = link_to '/', class: 'dashboard-button' do
-    i.fa-solid.fa-house
-    |  Back to Dashboard
+
+    /## PAGINATION SECTION ##
+    .pagination
+      - if @total_pages > 1
+        - (1..@total_pages).each do |page|
+          - active_class = (page == params[:page].to_i) ? 'active-page' : ''
+          - new_params = request.query_parameters.merge(page: page)
+          = link_to page, url_for(new_params), class: "page-link #{active_class}"
+
+
+    /## DASHBOARD BUTTON ##
+    .space-bot-m
+    = link_to '/', class: 'dashboard-button' do
+      i.fa-solid.fa-house
+      |  Back to Dashboard
+
+
 
 
 /###############################################################################
@@ -120,10 +147,6 @@ style
 /########################          
 javascript:
     $(document).ready(function () {
-        let   start     = 0;
-        const limit     = 20; // Number of records per request
-        let   isLoading = false; // Flag to indicate if data is currently being loaded
-
         // Modal handling
         $('tbody').on('click', '.open-modal', function (e) {
             console.log("Open modal clicked");  // Debugging line
@@ -220,92 +243,26 @@ javascript:
             currentSortKey = sortKey;
         });
 
-        loadRows(start, limit);
-        // ==============================================================================
-        // The loadRows function fetches a set of equipment inventory records from the
-        // server and appends them to the existing table. It uses the start and limit
-        // parameters to fetch a specific range of records.
-        // ------------------------------------------------------------------------------
-        function loadRows(start, limit) {
-            $.getJSON(`/equipment_inventories?start=${start}&limit=${limit}`, function (data) {
-                // Check if there are no more records to load
-                if (data.equipment.length === 0) {
-                    isLoading = false;
-                    return;
-                }
+        $('#apply_filters').click(function () {
+            const initial_letter = $('#initial_letter').val() || 'A';  // Default to 'A'
+            const status = $('#status').val();
+            const page = 1; // Reset to first page when applying filters
 
-                // Loop through each equipment record in the returned data
-                data.equipment.forEach(function (equipment) {
-                    console.log(`Equipment ID: ${equipment.id}, Checked In: ${equipment.status}`);
+            const url = new URL(window.location.href);
+            url.searchParams.set('initial_letter', initial_letter);
+            url.searchParams.set('status', status);
+            url.searchParams.set('page', page);
 
-                    const isCheckedIn = equipment.status === 0;  // Convert the status to a boolean
-                    const status = isCheckedIn ? 'IN' : 'OUT';
-                    const iconClass = isCheckedIn ? 'fa-check-circle' : 'fa-exclamation-circle';
-
-                    const row = `
-                     <tr class="row" data-name="${equipment.equipment_name}" data-id="${equipment.equipment_id}" data-status="${status}">
-                     <td>${equipment.equipment_name}</td>
-                     <td>${equipment.equipment_id}</td>
-                     <td class="status-cell" id="status-${equipment.id}">
-                       <i class="fa ${iconClass}" aria-hidden="true"></i>
-                       <span class="status-text">${status}</span>
-                     </td>
-                     <td>
-                       <div class="center-div" style="display: flex; justify-content: center">
-                         <div class="toggle-switch">
-                           <input class="toggle-switch-checkbox" type="checkbox" id="toggle-${equipment.id}" ${isCheckedIn ? 'checked' : ''} data-id="${equipment.id}" data-status="${isCheckedIn ? 'Check Out' : 'Check In'}">
-                           
-                           <label class="toggle-switch-label" for="toggle-${equipment.id}"></label>
-                         </div>
-                       </div>
-                     </td>
-                     <td>
-                       <div class="container no-pad">
-                         <a href="equipment_inventories/${equipment.id}" class="view-button">
-                           <div class="no-wrap">
-                             <i class="fa-solid fa-eye"></i> View
-                           </div>
-                         </a>
-                         <a href="equipment_inventories/${equipment.id}/edit" class="edit-button">
-                           <div class="no-wrap">
-                             <i class="fa-solid fa-pen-to-square"></i> Edit
-                           </div>
-                         </a>
-                         <a href="#" class="open-modal delete-button" data-url="equipment_inventories/${equipment.id}">
-                           <div class="no-wrap">
-                             <i class="fa-solid fa-trash"></i> Delete
-                           </div>
-                         </a>
-                       </div>
-                     </td>
-                   </tr>
-                 `;
-                    // Append the new row to the table body
-                    $('tbody').append(row);
-                });
-
-                isLoading = false; // Reset the loading flag
-                
-                // Slightly adjust scroll position to allow the scroll event to fire again
-                const $tableContainer = $('.table-container');
-                $tableContainer.scrollTop($tableContainer.scrollTop() - 1);
-            });
-        }
-        
-        $('.table-container').on('scroll', function () {
-            if (isLoading) {
-                return; // Exit if a load operation is already in progress
-            }
-            const $this = $(this);
-            const scrollTop = $this.scrollTop();
-            const scrollHeight = $this[0].scrollHeight;
-            const clientHeight = $this[0].clientHeight;
-
-            // Check if we've scrolled to the bottom
-            if (scrollTop + clientHeight >= scrollHeight) {
-                isLoading = true; // Set the flag to true before loading data
-                start += limit; // Update the start index for the next set of records
-                loadRows(start, limit);
-            }
+            window.location.href = url.toString();
         });
+
+        $('.letter-link').on('click', function (e) {
+            e.preventDefault();
+            const selectedLetter = $(this).data('letter');
+            const url = new URL(window.location.href);
+            url.searchParams.set('initial_letter', selectedLetter);
+            url.searchParams.set('page', 1);  // Reset to the first page
+            window.location.href = url.toString();
+        });
+
     });
