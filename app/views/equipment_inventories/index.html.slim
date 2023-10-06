@@ -1,59 +1,62 @@
 form#hiddenDeleteForm method="post" style="display:none;"
   input type="hidden" name="_method" value="delete"
   input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
-  
-.container.col 
+
+.container.col
   h1 Equipment Inventory
   i.fa-solid.fa-toolbox.space-bot-xl style="font-size: 7rem"
-  
-  = link_to  "equipment_inventories/new", class: 'add-button' do
+
+  = link_to "equipment_inventories/new", class: 'add-button' do
     i.fa-solid.fa-wrench
     |  Add Equipment 
   br
-  br  
-  table.dark-table style= "width: 900px"
-    thead
-      tr
-        th.sortable data-sort="name"  Equipment Name <i class="fa fa-sort"></i>
-        th.sortable data-sort="id"    Equipment ID <i class="fa fa-sort"></i>
-        th.sortable data-sort="status" Availability <i class="fa fa-sort"></i>
-        th Check-In/Out
-        th Actions
-    tbody
-      - @equipment_inventories.each do |equipment|
-        tr data-name=equipment.equipment_name data-id=equipment.equipment_id data-status=(equipment.checked_in? ? "IN" : "OUT")
-          td = equipment.equipment_name
-          td = equipment.equipment_id
-          td class="status-cell" id="status-#{equipment.id}"
-            i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
-            span.status-text
-              - if equipment.checked_in?
-                |  IN
-              - else
-                |  OUT
-          td
-            /## TOGGLE SWITCH ##
-            .center-div style="display: flex; justify-content: center"  
-              .toggle-switch 
-                input.toggle-switch-checkbox type="checkbox" id="toggle-#{equipment.id}" checked=(equipment.checked_in?) data-id=equipment.id data-status=(equipment.checked_in? ? "Check Out" : "Check In")
-                label.toggle-switch-label for="toggle-#{equipment.id}"
+  br
+  .table-container style="height: 550px; overflow-y: scroll;"   
+    table.dark-table style= "width: 1000px"
+      thead
+        tr
+          th.sortable data-sort="name"  Equipment Name <i class="fa fa-sort"></i>
+          th.sortable data-sort="id"    Equipment ID <i class="fa fa-sort"></i>
+          th.sortable data-sort="status" Availability <i class="fa fa-sort"></i>
+          th Check-In/Out
+          th Actions
+      tbody
+        - @equipment_inventories.each do |equipment|
+          tr.row data-name=equipment.equipment_name data-id=equipment.equipment_id data-status=(equipment.checked_in? ? "IN" : "OUT")
+            td = equipment.equipment_name
+            td = equipment.equipment_id
+            td class="status-cell" id="status-#{equipment.id}"
+              i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
+              span.status-text
+                - if equipment.checked_in?
+                  |  IN
+                - else
+                  |  OUT
+            td
+              /## TOGGLE SWITCH ##
+              .center-div style="display: flex; justify-content: center"  
+                .toggle-switch
+                  - if equipment.checked_in?
+                    input.toggle-switch-checkbox type="checkbox" id="toggle-#{equipment.id}" checked=true data-id=equipment.id data-status="Check Out"
+                  - else
+                    input.toggle-switch-checkbox type="checkbox" id="toggle-#{equipment.id}" data-id=equipment.id data-status="Check In"
+                  label.toggle-switch-label for="toggle-#{equipment.id}"
 
-          td
-            .container.no-pad
-              = link_to "equipment_inventories/#{equipment.id}", class: 'view-button' do
-                div.no-wrap
-                  i.fa-solid.fa-eye
-                  |  View
-              = link_to "equipment_inventories/#{equipment.id}/edit", class: 'edit-button' do 
-                div.no-wrap
-                  i.fa-solid.fa-pen-to-square
-                  |  Edit
-              /## DELETE BUTTON ##  
-              a.open-modal.delete-button data-url=equipment_inventory_path(equipment)
-                div.no-wrap
-                  i.fa-solid.fa-trash
-                  |  Delete
-                
+            td
+              .container.no-pad
+                = link_to "equipment_inventories/#{equipment.id}", class: 'view-button' do
+                  div.no-wrap
+                    i.fa-solid.fa-eye
+                    |  View
+                = link_to "equipment_inventories/#{equipment.id}/edit", class: 'edit-button' do
+                  div.no-wrap
+                    i.fa-solid.fa-pen-to-square
+                    |  Edit
+                /## DELETE BUTTON ##  
+                a.open-modal.delete-button data-url=equipment_inventory_path(equipment)
+                  div.no-wrap
+                    i.fa-solid.fa-trash
+                    |  Delete
   /## DASHBOARD BUTTON ## 
   .space-bot-m              
   = link_to '/', class: 'dashboard-button' do
@@ -68,17 +71,17 @@ form#hiddenDeleteForm method="post" style="display:none;"
   .modal-content
     h4.space-bot-xl style="color: black; font-size: 1.2rem" Are you sure you want to delete this equipment? 
     .modal-actions
-      
+
       /## CONFIRM MODAL BUTTON ##
       = link_to '#', id: 'confirmDelete', class: 'delete-button' do
         i.fa-solid.fa-thumbs-up
         |  Yes, Delete 
-      
+
       /## CANCEL MODAL BUTTON ##   
-      a.btn.modal-close 
+      a.btn.modal-close
         i.fa-solid.fa-thumbs-down
         |  No, Cancel 
-    
+
 
 style
   |
@@ -88,83 +91,101 @@ style
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    /* Style the scrollbar for Chrome, Safari and Opera */
+    .table-container::-webkit-scrollbar {
+      width: 12px; /* Width of the scrollbar */
+    }
     
+    .table-container::-webkit-scrollbar-thumb {
+      background: #888; /* Color of the scroll thumb */
+      border-radius: 10px; /* Roundness of the scroll thumb */
+    }
+    
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: #555; /* Color of the scroll thumb on hover */
+    }
+    /* Style scrollbar for Firefox */
+    .table-container {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
+    }
+    table.dark-table tr.row td {
+        padding: 0;
+        margin: 0;
+    }
+
+
 /###############################################################################
 /## JAVASCRIPT SECTION ##
 /########################          
 javascript:
     $(document).ready(function () {
+        let   start     = 0;
+        const limit     = 20; // Number of records per request
+        let   isLoading = false; // Flag to indicate if data is currently being loaded
+
+        // Modal handling
         $('.open-modal').on('click', function (e) {
             e.preventDefault();
             const deleteUrl = $(this).data('url');
             $('#hiddenDeleteForm').attr('action', deleteUrl);
             $('#deleteModal').show();
         });
+
         $('#confirmDelete').on('click', function (e) {
             e.preventDefault();
             $('#hiddenDeleteForm').submit();
         });
+
         $('.modal-close').on('click', function () {
             $('#deleteModal').hide();
         });
-        // =============
-        // Toggle switch
-        // -------------
-        $('.toggle-switch-checkbox').change(function () {
-            const equipmentId   = $(this).data('id');
+
+        // Use event delegation to attach the event handler to the table body
+        $('tbody').on('change', '.toggle-switch-checkbox', function () {
+            console.log("Checkbox changed");  // Debugging line
+            const equipmentId = $(this).data('id');
             const currentStatus = $(this).data('status');
-            const newStatus     = currentStatus === "Check Out" ? "Check In" : "Check Out";
-            const newStatusText = currentStatus === "Check In"  ? " IN" : " OUT";
-            const newIconClass  = currentStatus === "Check In"  ? "fa-check-circle" : "fa-exclamation-circle";
-            const csrfToken     = $('meta[name="csrf-token"]').attr('content');
+            console.log(`Equipment ID: ${equipmentId}, Current Status: ${currentStatus}`);  // Debugging line
+
+
+            const newStatus = currentStatus === "Check Out" ? "Check In" : "Check Out";
+            const newStatusText = currentStatus === "Check In" ? " IN" : " OUT";
+            const newIconClass = currentStatus === "Check In" ? "fa-check-circle" : "fa-exclamation-circle";
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
                 url: `/equipment_inventories/${equipmentId}/toggle_status`,
                 method: 'POST',
                 headers: {'X-CSRF-Token': csrfToken},
                 success: function (response) {
+                    console.log("Ajax request successful");  // Debugging line
+                    console.log(response);  // Debugging line
+
                     const statusCell = $(`#status-${equipmentId}`);
                     statusCell.find('i.fa').attr('class', `fa ${newIconClass}`);
                     statusCell.find('span.status-text').text(newStatusText);
                     $(`#toggle-${equipmentId}`).data('status', newStatus);
+                },
+                error: function (error) {
+                    console.log("Ajax request failed");  // Debugging line
+                    console.log(error);  // Debugging line
                 }
             });
         });
         
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
-        $('.update-button').click(function (e) {
-            e.preventDefault();
-            console.log("CLICK")
-            const equipmentId   = $(this).data('id');
-            const currentStatus = $(this).data('status');
-            const newStatus     = currentStatus === "Check Out" ? "Check In"   : "Check Out";
-            const newStatusText = currentStatus === "Check In"  ? "Checked In" : "Checked Out";
-
-            $.ajax({
-                url: `/equipment_inventories/${equipmentId}/toggle_status`,
-                method: 'POST',
-                headers: {'X-CSRF-Token': csrfToken},
-                success: function (response) {
-                    $(`#status-${equipmentId}`).text(newStatusText);
-                    $(`[data-id="${equipmentId}"]`).text(newStatus).data('status', newStatus);
-                }
-            });
-        });
-
+        // Sorting
         let currentSortKey = null;
         let sortOrder = 'default';
 
-        // Sorting function
         $('.sortable').click(function () {
             const sortKey = $(this).data('sort');
 
-            // Reset other headers if a different header is clicked
             if (currentSortKey !== sortKey) {
                 $('.sortable').find('i').attr('class', 'fa fa-sort');
                 sortOrder = 'default';
             }
 
-            // Update sort order
             if (sortOrder === 'default') {
                 sortOrder = 'asc';
             } else if (sortOrder === 'asc') {
@@ -173,7 +194,6 @@ javascript:
                 sortOrder = 'default';
             }
 
-            // Update visual indicator
             $(this).find('i').attr('class', sortOrder === 'default' ? 'fa fa-sort' : `fa fa-sort-${sortOrder}`);
 
             const rows = $('tbody tr').get();
@@ -190,7 +210,6 @@ javascript:
             });
 
             if (sortOrder === 'default') {
-                // Reload original order (you may need to adjust this part based on how you load the original order)
                 location.reload();
             } else {
                 $.each(rows, function (index, row) {
@@ -198,5 +217,94 @@ javascript:
                 });
             }
             currentSortKey = sortKey;
+        });
+
+        loadRows(start, limit);
+        // ==============================================================================
+        // The loadRows function fetches a set of equipment inventory records from the
+        // server and appends them to the existing table. It uses the start and limit
+        // parameters to fetch a specific range of records.
+        // ------------------------------------------------------------------------------
+        function loadRows(start, limit) {
+            $.getJSON(`/equipment_inventories?start=${start}&limit=${limit}`, function (data) {
+                // Check if there are no more records to load
+                if (data.equipment.length === 0) {
+                    isLoading = false;
+                    return;
+                }
+
+                // Loop through each equipment record in the returned data
+                data.equipment.forEach(function (equipment) {
+                    console.log(`Equipment ID: ${equipment.id}, Checked In: ${equipment.status}`);
+
+                    const isCheckedIn = equipment.status === 0;  // Convert the status to a boolean
+                    const status = isCheckedIn ? 'IN' : 'OUT';
+                    const iconClass = isCheckedIn ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+                    const row = `
+                     <tr class="row" data-name="${equipment.equipment_name}" data-id="${equipment.equipment_id}" data-status="${status}">
+                     <td>${equipment.equipment_name}</td>
+                     <td>${equipment.equipment_id}</td>
+                     <td class="status-cell" id="status-${equipment.id}">
+                       <i class="fa ${iconClass}" aria-hidden="true"></i>
+                       <span class="status-text">${status}</span>
+                     </td>
+                     <td>
+                       <div class="center-div" style="display: flex; justify-content: center">
+                         <div class="toggle-switch">
+                           <input class="toggle-switch-checkbox" type="checkbox" id="toggle-${equipment.id}" ${isCheckedIn ? 'checked' : ''} data-id="${equipment.id}" data-status="${isCheckedIn ? 'Check Out' : 'Check In'}">
+                           
+                           <label class="toggle-switch-label" for="toggle-${equipment.id}"></label>
+                         </div>
+                       </div>
+                     </td>
+                     <td>
+                       <div class="container no-pad">
+                         <a href="equipment_inventories/${equipment.id}" class="view-button">
+                           <div class="no-wrap">
+                             <i class="fa-solid fa-eye"></i> View
+                           </div>
+                         </a>
+                         <a href="equipment_inventories/${equipment.id}/edit" class="edit-button">
+                           <div class="no-wrap">
+                             <i class="fa-solid fa-pen-to-square"></i> Edit
+                           </div>
+                         </a>
+                         <a href="#" class="open-modal delete-button" data-url="equipment_inventories/${equipment.id}">
+                           <div class="no-wrap">
+                             <i class="fa-solid fa-trash"></i> Delete
+                           </div>
+                         </a>
+                       </div>
+                     </td>
+                   </tr>
+                 `;
+                    // Append the new row to the table body
+                    $('tbody').append(row);
+                });
+
+                isLoading = false; // Reset the loading flag
+                
+                // Slightly adjust scroll position to allow the scroll event to fire again
+                const $tableContainer = $('.table-container');
+                $tableContainer.scrollTop($tableContainer.scrollTop() - 1);
+            });
+        }
+        
+        $('.table-container').on('scroll', function () {
+            if (isLoading) {
+                return; // Exit if a load operation is already in progress
+            }
+            const $this = $(this);
+            const scrollTop = $this.scrollTop();
+            const scrollHeight = $this[0].scrollHeight;
+            const clientHeight = $this[0].clientHeight;
+
+            // Check if we've scrolled to the bottom
+            if (scrollTop + clientHeight >= scrollHeight) {
+                isLoading = true; // Set the flag to true before loading data
+                start += limit; // Update the start index for the next set of records
+                loadRows(start, limit);
+            }
         });
     });
