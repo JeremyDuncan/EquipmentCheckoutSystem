@@ -1,7 +1,15 @@
 class EquipmentInventoriesController < ApplicationController
   def index
-    @equipment_inventories = EquipmentInventory.where(deleted: false)
-    @removed_equipment     = EquipmentInventory.where(deleted: true)
+    start = params[:start].to_i || 0
+    limit = params[:limit].to_i || 50 # Number of records per request
+  
+    @equipment_inventories = EquipmentInventory.where(deleted: false).offset(start).limit(limit).order(id: :desc)
+    @removed_equipment     = EquipmentInventory.where(deleted: true).offset(start).limit(limit)
+  
+    respond_to do |format|
+      format.html
+      format.json { render json: { equipment: @equipment_inventories, removed_equipment: @removed_equipment } }
+    end
   end
   
   # =======================================================
