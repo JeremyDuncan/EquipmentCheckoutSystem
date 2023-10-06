@@ -81,9 +81,23 @@ form#hiddenDeleteForm method="post" style="display:none;"
       - prev_disabled = (@page == 1) ? 'disabled' : ''
       - next_disabled = (@page == @total_pages) ? 'disabled' : ''
       = link_to raw('<i class="fas fa-arrow-left"></i>'), url_for(request.query_parameters.merge(page: prev_page)), class: "pagination-button prev-button #{prev_disabled}", rel: ('nofollow' if @page == 1), data: { disabled: (@page == 1) }
-      - (1..@total_pages).each do |page_num|
+
+      - window_size = 3 # Number of pages to show around the current page
+      - start_page = [@page - window_size, 1].max
+      - end_page = [@page + window_size, @total_pages].min
+
+      - if start_page > 1
+        = link_to '1', url_for(request.query_parameters.merge(page: 1)), class: 'pagination-button'
+        span ... 
+
+      - (start_page..end_page).each do |page_num|
         - active_class = (page_num == @page) ? 'active-page' : ''
         = link_to page_num, url_for(request.query_parameters.merge(page: page_num)), class: "pagination-button #{active_class}"
+
+      - if end_page < @total_pages
+        span ... 
+        = link_to @total_pages, url_for(request.query_parameters.merge(page: @total_pages)), class: 'pagination-button'
+
       = link_to raw('<i class="fas fa-arrow-right"></i>'), url_for(request.query_parameters.merge(page: next_page)), class: "pagination-button next-button #{next_disabled}", rel: ('nofollow' if @page == @total_pages), data: { disabled: (@page == @total_pages) }
 
     /## PAGINATION METRICS ##
