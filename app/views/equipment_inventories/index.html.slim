@@ -11,8 +11,8 @@ form#hiddenDeleteForm method="post" style="display:none;"
     |  Add Equipment 
   br
   br
-  .table-container style="height: 500px; overflow-y: scroll; border-radius: 9px"   
-    table.dark-table style= "width: 900px"
+  .table-container style="height: 550px; overflow-y: scroll;"   
+    table.dark-table style= "width: 1000px"
       thead
         tr
           th.sortable data-sort="name"  Equipment Name <i class="fa fa-sort"></i>
@@ -22,7 +22,7 @@ form#hiddenDeleteForm method="post" style="display:none;"
           th Actions
       tbody
         - @equipment_inventories.each do |equipment|
-          tr data-name=equipment.equipment_name data-id=equipment.equipment_id data-status=(equipment.checked_in? ? "IN" : "OUT")
+          tr.row data-name=equipment.equipment_name data-id=equipment.equipment_id data-status=(equipment.checked_in? ? "IN" : "OUT")
             td = equipment.equipment_name
             td = equipment.equipment_id
             td class="status-cell" id="status-#{equipment.id}"
@@ -109,8 +109,12 @@ style
       scrollbar-width: thin;
       scrollbar-color: #888 #f1f1f1;
     }
-    
-    
+    table.dark-table tr.row td {
+        padding: 0;
+        margin: 0;
+    }
+
+
 /###############################################################################
 /## JAVASCRIPT SECTION ##
 /########################          
@@ -238,7 +242,7 @@ javascript:
                     const iconClass = isCheckedIn ? 'fa-check-circle' : 'fa-exclamation-circle';
 
                     const row = `
-                   <tr data-name="${equipment.equipment_name}" data-id="${equipment.equipment_id}" data-status="${status}">
+                     <tr class="row" data-name="${equipment.equipment_name}" data-id="${equipment.equipment_id}" data-status="${status}">
                      <td>${equipment.equipment_name}</td>
                      <td>${equipment.equipment_id}</td>
                      <td class="status-cell" id="status-${equipment.id}">
