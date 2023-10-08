@@ -2,14 +2,7 @@ form#hiddenDeleteForm method="post" style="display:none;"
   input type="hidden" name="_method" value="delete"
   input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
 
-.container.col
-  h1 Equipment Inventory
-  i.fa-solid.fa-toolbox.space-bot-xl style="font-size: 7rem"
-
-  = link_to "equipment_inventories/new", class: 'add-button modern-button' do
-    i.fa-solid.fa-wrench
-    |  Add Equipment
-
+.container.col style="padding-top: 0px"
   /## LETTER FILTER SECTION ##
   .letter-filter
     - ('A'..'Z').each do |letter|
@@ -26,7 +19,9 @@ form#hiddenDeleteForm method="post" style="display:none;"
       option value="1" selected=(@status == "1") Checked Out
     | &nbsp
     button#apply_filters.btn.btn-primary.modern-button Apply Filter
-
+    = link_to "equipment_inventories/new", class: 'add-button modern-button' do
+      i.fa-solid.fa-wrench
+      |  Add Equipment
     table.dark-table style= "width: 1050px"
       thead
         tr
@@ -101,12 +96,13 @@ form#hiddenDeleteForm method="post" style="display:none;"
       = link_to raw('<i class="fas fa-arrow-right"></i>'), url_for(request.query_parameters.merge(page: next_page)), class: "pagination-button next-button #{next_disabled}", rel: ('nofollow' if @page == @total_pages), data: { disabled: (@page == @total_pages) }
 
     /## PAGINATION METRICS ##
-    .pagination-metrics
-      - start_record = (@page - 1) * 25 + 1
-      - end_record = [@page * 25, @total_records].min
-      | Showing #{start_record} to #{end_record} of #{@total_records} records
-      br
-      | Total Equipment Inventory: #{@grand_total_records}
+    - if @total_records > 0
+      .pagination-metrics
+        - start_record = (@page - 1) * 10 + 1
+        - end_record = [@page * 10, @total_records].min
+        | Showing #{start_record} to #{end_record} of #{@total_records} records
+        br
+        | Total Equipment Inventory: #{@grand_total_records}
 
     /## DASHBOARD BUTTON ##
     .space-bot-m
@@ -164,6 +160,9 @@ style
         padding: 0;
         margin: 0;
     }
+    .letter-filter {margin-top: 0px}
+    .status-filter {margin-top: 0px}
+
 
 
 /###############################################################################

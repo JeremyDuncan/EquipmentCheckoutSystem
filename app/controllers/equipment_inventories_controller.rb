@@ -8,7 +8,7 @@ class EquipmentInventoriesController < ApplicationController
     # Pagination
     @page = params[:page].to_i
     @page = 1 if @page.zero?
-    per_page = 25
+    per_page = 10
     offset = (@page - 1) * per_page
 
     # Filtering

@@ -12,13 +12,30 @@ style
       position: sticky;
       top: 0;
       z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header_two {
+      background-color: #1a1a1a;
+      padding: 0px;
+      border-radius: 0px 0px 10px 10px;
+      position: sticky;
+      top: 60px;
+      z-index: 9999;
+    }
+    header_two>h2 {
+      font-size: 1.2rem;
+      padding: 0px;
+      margin-top: 0px
+
     }
     nav {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 1em;
-      position: relative;  // This is to position the logout button absolutely.
+      position: relative;
     }
     nav a, .nav-button {
       color: white;
@@ -43,23 +60,40 @@ style
       font-size: 1rem;
     }
     .logout-button {
-      position: absolute;
-      right: 0;
-      top: -45px;
+      margin-left: auto;
+
     }
 
 - if current_staff.present?
   - logout_path = Rails.application.routes.url_helpers.send("destroy_#{current_staff.class.name.underscore}_session_path")
-  header
-    h2 style=("font-size: 1.4rem; padding: 0px; margin: 0px")
+  - role = ""
+  - icon = ""
+  - role = "Human Resources Employee Roster" if hr_staff?
+  - role = "Maintenance Equipment Inventory" if maintenance?
+  - role = "Management Reports"              if management?
+  - icon = "fa-people-group" if hr_staff?
+  - icon = "fa-toolbox"      if maintenance?
+  - icon = "fa-file-alt"     if management?
+
+  header style="display: flex; justify-content: space-between; align-items: center; gap: 220px; padding-top: 0px;  padding-bottom: 10px;"
+    h2 style="font-size: 1.4rem; padding-top: 15px; padding-bottom: 0px; margin: 0px"
+      i.fa-solid.fa-screwdriver-wrench
+      | &nbsp
       | Equipment Checkout System (ECS)
-  
+
     nav.space-top-s
       = button_to logout_path, method: :delete, class: 'nav-button logout-button', data: { turbolinks: false } do
         i.fa.fa-sign-out-alt
         | Logout
-        
+  header_two style="display: flex; justify-content: center; align-items: center; "
+    h2 style="margin: 0px"
+      = role
+      | &nbsp
+      i class=" fa-solid #{icon}"
+
 - else
-  header
-    h2 style=("font-size: 1.1rem; padding-bottom: 10px; padding-top: 10px margin: 0px")
+  header style="display: flex; justify-content: center;"
+    h2 style=("font-size: 1.1rem; padding-bottom: 10px; padding-top: 10px margin: 0px;")
       | Welcome
+
+.space-bot-m
