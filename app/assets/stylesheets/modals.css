@@ -10,7 +10,7 @@
     z-index: 9999;
 }
 
-.modal-content {
+.image-modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -23,5 +23,5 @@
     width: 80% !important;
     max-height: 500px !important;
     object-fit: contain;
-
+    border-radius: 10px
 }
