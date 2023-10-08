@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_05_115218) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_08_014055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_05_115218) do
 
   create_table "equipment_movements", force: :cascade do |t|
     t.bigint "equipment_inventory_id", null: false
-    t.bigint "maintenance_staff_id", null: false
+    t.bigint "maintenance_staff_id"
     t.datetime "moved_at", null: false
     t.string "action", null: false
     t.datetime "created_at", null: false
@@ -103,6 +103,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_05_115218) do
 
   add_foreign_key "equipment_inventories", "maintenance_staffs", column: "maintenance_staffs_id"
   add_foreign_key "equipment_movements", "equipment_inventories"
-  add_foreign_key "equipment_movements", "maintenance_staffs"
+  add_foreign_key "equipment_movements", "maintenance_staffs", on_delete: :nullify
   add_foreign_key "reports", "management_staffs", column: "management_staffs_id"
 end

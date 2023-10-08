@@ -1,103 +1,151 @@
 form#hiddenDeleteForm method="post" style="display:none;"
   input type="hidden" name="_method" value="delete"
   input type="hidden" name="authenticity_token" value="#{form_authenticity_token}"
+  input type="hidden" id="currentLetter" name="current_letter" value=""
+  input type="hidden" id="currentRole"   name="current_role" value=""
 
-.container.col 
-  h1 Human Resources
-  i.fa-solid.fa-user-tie.space-bot-xl style="font-size: 7rem;"
-  = link_to "hr_staffs/new", class: 'add-button' do
-    i.fa-solid.fa-user-plus
-    |  Add Employee
-  .space-bot-s
-  h2 Employee Roster
-  table.dark-table style="width: 900px"
+.container.col  style="padding-top: 5px"
+  h3 style="margin: 0px; padding-top: 10px" Employee Roster
+  /## LETTER FILTER SECTION ##
+  .letter-filter
+    - ('A'..'Z').each do |letter|
+      - active_class = (letter == @initial_letter) ? 'active-letter' : ''
+      a.letter-link href="#" class="#{active_class}" data-letter=letter = letter
+
+  /## ROLE FILTER SECTION ##
+  .role-filter
+    label for="role" Filter by role:
+    | &nbsp
+    select#role.form-control.modern-select
+      option value="HrStaff"          selected=(@role == "HrStaff")          HR Staff
+      option value="MaintenanceStaff" selected=(@role == "MaintenanceStaff") Maintenance Staff
+      option value="ManagementStaff"  selected=(@role == "ManagementStaff")  Management Staff
+    | &nbsp
+    button#apply_filters.btn.btn-primary.modern-button Apply Filter
+    = link_to "hr_staffs/new", class: 'add-button modern-button' do
+      i.fa-solid.fa-user-plus
+      |  Add Employee
+  table.dark-table style="width: 1050px; padding: 0px;"
     thead
       tr
-        th.sortable data-sort="first_name" 
-          | First Name 
-          i.fa.fa-sort
-        th.sortable data-sort="last_name"  
-          | Last Name 
-          i.fa.fa-sort
-        th.sortable data-sort="role"       
-          | Role 
-          i.fa.fa-sort
-        th.sortable data-sort="created_at" 
-          | Employment Date 
-          i.fa.fa-sort
+        th.sortable data-sort="first_name"  First Name
+        th.sortable data-sort="last_name"   Last Name
+        th.sortable data-sort="role"        Role
+        th.sortable data-sort="created_at"  Employment Date
         th Actions
-
-    tbody
+    tbody style=" padding: 0px;"
       - @all_staffs.each do |type, staffs|
-        - staffs.each do |staff|
-          tr data-first_name=staff.first_name data-last_name=staff.last_name data-role=staff.class.name data-created_at=staff.created_at.to_i
-            td = staff.first_name
-            td = staff.last_name
-            td = staff.class.name
-            td = staff.created_at.strftime("%d %b %Y")
-            td
-              .container.no-pad
-                /## VIEW BUTTON ##
-                = link_to "#{type}/#{staff.id}", class: 'view-button' do
-                  i.fa-regular.fa-id-card
-                  |  View
-                /## EDIT BUTTON ##
-                = link_to "#{type}/#{staff.id}/edit", class: 'edit-button' do
-                  i.fa-solid.fa-user-pen
-                  |  Edit
-                /## DELETE BUTTON ##
-                a.open-modal.delete-button data-url=send("#{type.to_s.singularize}_path", staff)
-                  i.fa-solid.fa-trash
-                  |  Delete
+        - if staffs.present?
+          - staffs.each do |staff|
+            tr.row.no-pad  data-first_name=staff.first_name data-last_name=staff.last_name data-role=staff.class.name data-created_at=staff.created_at.to_i
+              td.no-pad  = staff.first_name
+              td.no-pad  = staff.last_name
+              td.no-pad  = staff.class.name
+              td.no-pad  = staff.created_at.strftime("%d %b %Y")
+              td.no-pad
+                .container.no-pad
+                  = link_to "#{type}/#{staff.id}", class: 'view-button' do
+                    i.fa-regular.fa-id-card
+                    |  View
+                  = link_to "#{type}/#{staff.id}/edit", class: 'edit-button' do
+                    i.fa-solid.fa-user-pen
+                    |  Edit
+                  /## DELETE BUTTON ##
+                  a.open-modal.delete-button data-url=send("#{type.to_s.singularize}_path", staff)
+                    i.fa-solid.fa-trash
+                    |  Delete
 
-                
-  /## DASHBOARD BUTTON ## 
-  .space-bot-m              
+  /## PAGINATION SECTION ##
+  .pagination
+    - prev_page     = [@page - 1, 1].max
+    - next_page     = [@page + 1, @total_pages].min
+    - prev_disabled = (@page == 1) ? 'disabled' : ''
+    - next_disabled = (@page == @total_pages) ? 'disabled' : ''
+    = link_to raw('<i class="fas fa-arrow-left"></i>'),
+            url_for(request.query_parameters.merge(page: prev_page)),
+            class: "pagination-button prev-button #{prev_disabled}",
+            rel: ('nofollow' if @page == 1),
+            data: { disabled: (@page == 1) }
+
+    - window_size = 3 # Number of pages to show around the current page
+    - start_page  = [@page - window_size, 1].max
+    - end_page    = [@page + window_size, @total_pages].min
+
+
+    - start_record = (@page - 1) * @per_page + 1
+    - end_record = [@page * @per_page, @total_records].min
+
+    - if start_page > 1
+      = link_to '1', url_for(request.query_parameters.merge(page: 1)), class: 'pagination-button'
+
+    - (start_page..end_page).each do |page_num|
+      - active_class = (page_num == @page) ? 'active-page' : ''
+      = link_to page_num, url_for(request.query_parameters.merge(page: page_num)), class: "pagination-button #{active_class}"
+
+    - if end_page < @total_pages
+      = link_to @total_pages, url_for(request.query_parameters.merge(page: @total_pages)), class: 'pagination-button'
+
+    = link_to raw('<i class="fas fa-arrow-right"></i>'),
+            url_for(request.query_parameters.merge(page: next_page)),
+            class: "pagination-button next-button #{next_disabled}",
+            rel: ('nofollow' if @page == @total_pages),
+            data: { disabled: (@page == @total_pages) }
+
+  /## PAGINATION METRICS ##
+  - if @total_records > 0
+    .pagination-metrics
+      - start_record = (@page - 1) * @per_page + 1
+      - end_record = [@page * @per_page, @total_records].min
+
+      | Showing #{start_record} to #{end_record} of #{@total_records} records
+      br
+      | Total Staff: #{@grand_total_records}
+
+  /## DASHBOARD BUTTON ##
+  .space-bot-m
   = link_to '/', class: 'dashboard-button' do
     i.fa-solid.fa-house
     |  Back to Dashboard
 
 
-/###############################################################################
-/## MODAL SECTION ##
-/###################    
-#deleteModal.modal
-  .modal-content
-    h4.space-bot-xl style="color: black; font-size: 1.2rem" Are you sure you want to delete this HR Employee? 
-    .modal-actions
-      
-      /## CONFIRM MODAL BUTTON ##
-      = link_to '#', id: 'confirmDelete', class: 'delete-button' do
-        i.fa-solid.fa-thumbs-up
-        |  Yes, Delete 
-      
-      /## CANCEL MODAL BUTTON ##   
-      a.btn.modal-close 
-        i.fa-solid.fa-thumbs-down
-        |  No, Cancel 
+  /###############################################################################
+  /## MODAL SECTION ##
+  /###################
+  #deleteModal.modal
+    .modal-content
+      h4.space-bot-xl style="color: black; font-size: 1.2rem" Are you sure you want to delete this HR Employee?
+      .modal-actions
 
+        /## CONFIRM MODAL BUTTON ##
+        = link_to '#', id: 'confirmDelete', class: 'delete-button' do
+          i.fa-solid.fa-thumbs-up
+          |  Yes, Delete
 
+        /## CANCEL MODAL BUTTON ##
+        a.btn.modal-close
+          i.fa-solid.fa-thumbs-down
+          |  No, Cancel
 
 style
   |
-    .sortable { cursor: pointer;}
+    .no-pad { padding: 0px !important; }
+    .letter-filter {margin-top: 0px}
 
 
-/###############################################################################
-/## JAVASCRIPT SECTION ##
-/########################          
 javascript:
     $(document).ready(function () {
         $('.open-modal').on('click', function (e) {
-            e.preventDefault();
             const deleteUrl = $(this).data('url');
+            const currentLetter = $('.active-letter').data('letter'); // Get the current active letter
             $('#hiddenDeleteForm').attr('action', deleteUrl);
+            $('#currentLetter').val(currentLetter); // Set the current letter
             $('#deleteModal').show();
         });
 
         $('#confirmDelete').on('click', function (e) {
             e.preventDefault();
             $('#hiddenDeleteForm').submit();
+
         });
 
         $('.modal-close').on('click', function () {
@@ -105,54 +153,41 @@ javascript:
         });
 
 
-        let currentSortKey = null;
-        let sortOrder = 'default';
-
-        // Sorting function
-        $('.sortable').click(function () {
-            const sortKey = $(this).data('sort');
-
-            // Reset other headers if a different header is clicked
-            if (currentSortKey !== sortKey) {
-                $('.sortable').find('i').attr('class', 'fa fa-sort');
-                sortOrder = 'default';
-            }
-
-            // Update sort order
-            if (sortOrder === 'default') {
-                sortOrder = 'asc';
-            } else if (sortOrder === 'asc') {
-                sortOrder = 'desc';
-            } else {
-                sortOrder = 'default';
-            }
-
-            // Update visual indicator
-            $(this).find('i').attr('class', sortOrder === 'default' ? 'fa fa-sort' : `fa fa-sort-${sortOrder}`);
-
-            const rows = $('tbody tr').get();
-            rows.sort(function (a, b) {
-                const A = $(a).data(sortKey).toString().toUpperCase();
-                const B = $(b).data(sortKey).toString().toUpperCase();
-                if (A < B) {
-                    return sortOrder === 'asc' ? -1 : 1;
-                }
-                if (A > B) {
-                    return sortOrder === 'asc' ? 1 : -1;
-                }
-                return 0;
-            });
-
-            if (sortOrder === 'default') {
-                // Reload original order (you may need to adjust this part based on how you load the original order)
-                location.reload();
-            } else {
-                $.each(rows, function (index, row) {
-                    $('tbody').append(row);
-                });
-            }
-            currentSortKey = sortKey;
+        // When a letter is clicked
+        $('.letter-link').click(function (e) {
+            e.preventDefault();
+            const letter = $(this).data('letter');
+            updateFilters({initial_letter: letter, page: 1});
         });
 
+        // When the role dropdown changes
+        $('#role').change(function () {
+            const role = $(this).val();
+            updateFilters({role: role});
+        });
 
+        // When the "Apply Filter" button is clicked
+        $('#apply_filters').click(function (e) {
+            e.preventDefault();
+            applyFilters();
+        });
+
+        function updateFilters(newParams) {
+            const params = new URLSearchParams(window.location.search);
+            Object.keys(newParams).forEach(key => {
+                const value = newParams[key];
+                if (value) {
+                    params.set(key, value);
+                } else {
+                    params.delete(key);
+                }
+            });
+            window.location.search = params.toString();
+        }
+
+        function applyFilters() {
+            // Collect all filter values and update the URL
+            const role = $('#role').val();
+            updateFilters({role: role});
+        }
     });

@@ -62,9 +62,9 @@ class MaintenanceStaffsController < ApplicationController
   
   def destroy
     @maintenance_staff = MaintenanceStaff.find(params[:id])
-    puts @maintenance_staff.inspect
     @maintenance_staff.destroy
-    redirect_to maintenance_staffs_path, notice: 'Maintenance Employee was successfully removed.'
+    current_letter = params[:current_letter]
+    redirect_to hr_staffs_path(initial_letter: current_letter, role: "MaintenanceStaff")
   end
   
   private
