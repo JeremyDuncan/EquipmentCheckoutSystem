@@ -146,7 +146,8 @@ class EquipmentInventoriesController < ApplicationController
                                                 :last_checked_out_by, 
                                                 :last_checked_out_at, 
                                                 :last_checked_in_by, 
-                                                :last_checked_in_at)
+                                                :last_checked_in_at,
+                                                :image)
   end
   
   def record_movement(action)

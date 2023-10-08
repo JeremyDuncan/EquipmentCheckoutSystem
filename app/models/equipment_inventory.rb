@@ -1,4 +1,6 @@
 class EquipmentInventory < ApplicationRecord
+  mount_uploader :image, EquipmentImageUploader
+
   # belongs_to :maintenance_staff, optional: true
   belongs_to :management_staff,  optional: true
   # =====================================================================

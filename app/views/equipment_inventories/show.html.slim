@@ -1,8 +1,8 @@
 - equipment = @equipment_inventory
-.container.col 
+.container.col
   h1 Equipment Details
   i.fa-solid.fa-screwdriver-wrench.space-bot-xl style="font-size: 7rem"
-  
+
   div.fake-table
     div.fake-table-row.fake-table-header
       div.fake-table-cell Equipment
@@ -21,14 +21,25 @@
           |  Checked In
         - else
           |  Checked Out
+    div.fake-table-row.fake-table-body
+      div.fake-table-cell Equipment Image
+      div.fake-table-cell
+        - if equipment.image.present?
+          = image_tag equipment.image.url, alt: "#{equipment.equipment_name} Image", class: 'tool-image'
+        - else
+          | No Image Available
 
   .container
     /## EDIT BUTTON ##
     = link_to "/equipment_inventories/#{equipment.id}/edit", class: 'btn' do
       i.fa-solid.fa-user-pen
       |  Edit
-      
+
     /## BACK BUTTON ##
     = link_to '/equipment_inventories', class: "btn" do
       i.fa-solid.fa-chevron-left
-      |  Back  
+      |  Back
+
+style
+  |
+    .tool-image {max-width: 400px}
