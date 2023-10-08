@@ -27,6 +27,7 @@ form#hiddenDeleteForm method="post" style="display:none;"
         tr
           th.sortable data-sort="name"  Equipment Name <i class="fa fa-sort"></i>
           th.sortable data-sort="id"    Equipment ID <i class="fa fa-sort"></i>
+          th Image
           th.sortable data-sort="status" Availability <i class="fa fa-sort"></i>
           th Check-In/Out
           th Actions
@@ -35,6 +36,14 @@ form#hiddenDeleteForm method="post" style="display:none;"
           tr.row data-name=equipment.equipment_name data-id=equipment.equipment_id data-status=(equipment.checked_in? ? "IN" : "OUT")
             td = equipment.equipment_name
             td = equipment.equipment_id
+            td
+              - if equipment.image.present?
+                a.image-modal-trigger href="#" data-image-url=equipment.image.url
+                  = image_tag equipment.image.url(:thumb), alt: "#{equipment.equipment_name} Thumbnail", class: 'equipment-thumbnail'
+              - else
+                | No Image
+                | &nbsp
+                i.fa-solid.fa-image
             td class="status-cell" id="status-#{equipment.id}"
               i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
               span.status-text
@@ -128,6 +137,11 @@ form#hiddenDeleteForm method="post" style="display:none;"
       a.btn.modal-close
         i.fa-solid.fa-thumbs-down
         |  No, Cancel 
+
+/## IMAGE DISPLAY MODAL SECTION ##
+#imageModal.modal
+  .modal-content
+    img#modalImage src="" alt="Equipment Image"
 
 
 style
@@ -293,5 +307,19 @@ javascript:
                 e.preventDefault();
             }
         });
+
+
+        $('tbody').on('click', '.image-modal-trigger', function (e) {
+            e.preventDefault();
+            const imageUrl = $(this).data('image-url');
+            $('#modalImage').attr('src', imageUrl);
+            $('#imageModal').show();
+        });
+
+        // Close image modal
+        $('#imageModal').on('click', function () {
+            $(this).hide();
+        });
+
 
     });

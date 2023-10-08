@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_08_014055) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_08_174848) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_08_014055) do
     t.string "last_checked_in_by"
     t.datetime "last_checked_in_at"
     t.boolean "deleted", default: false
+    t.string "image"
     t.index ["maintenance_staffs_id"], name: "index_equipment_inventories_on_maintenance_staffs_id"
   end
 

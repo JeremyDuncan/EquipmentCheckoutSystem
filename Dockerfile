@@ -6,14 +6,9 @@ FROM ruby:3.2.2
 # ==============================================================================
 # Set environment variables
 # ------------------------------------------------------------------------------
-# ENV RAILS_ROOT /var/www/EquipmentCheckoutSystem
-# ENV RAILS_ENV='production'
-# ENV RACK_ENV='production'
-
 ENV RAILS_ROOT /var/www/EquipmentCheckoutSystem
-ENV RAILS_ENV='development' 
-ENV RACK_ENV='development'  
-
+ENV RAILS_ENV='development'
+ENV RACK_ENV='development'
 
 # ==============================================================================
 # Create and set the working directory
@@ -24,7 +19,8 @@ WORKDIR $RAILS_ROOT
 # ==============================================================================
 # Install system dependencies
 # ------------------------------------------------------------------------------
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+# Add ImageMagick here
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client imagemagick
 
 # ==============================================================================
 # Copy Gemfile and install gems
