@@ -8,7 +8,7 @@ class EquipmentImageUploader < CarrierWave::Uploader::Base
 
   # Create different versions of your uploaded files:
   version :thumb do
-    process resize_to_fill: [200, 200]
+    process resize_to_fill: [50, 50]
   end
 
   def store_dir
