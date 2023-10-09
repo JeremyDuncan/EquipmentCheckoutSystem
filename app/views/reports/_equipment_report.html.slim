@@ -1,35 +1,67 @@
-.equipment-container
-  div.fake-table style="width: 60%"
-    div.fake-table-row.fake-table-header.shrink-h
-      div.fake-table-cell.shrink-h Equipment
-      div.fake-table-cell.shrink-h Info
-    div.fake-table-row.fake-table-body.shrink-h 
-      div.fake-table-cell.shrink-h  Equipment Name
-      div.fake-table-cell.shrink-h  = equipment.equipment_name
-      
-    div.fake-table-row.fake-table-body.shrink-h
-      div.fake-table-cell.shrink-h Equipment ID
-      div.fake-table-cell.shrink-h = equipment.serial
-      
-    div.fake-table-row.fake-table-body.shrink-h
-      div.fake-table-cell.shrink-h Date Added
-      div.fake-table-cell.shrink-h = equipment.created_at.strftime("%d %b %Y") 
-       
-    div.fake-table-row.fake-table-body.shrink-h
-      div.fake-table-cell.shrink-h Status
-      div.fake-table-cell.shrink-h
-        i.fa class=(equipment.checked_in? ? "fa-check-circle" : "fa-exclamation-circle") aria-hidden="true"
-        - if equipment.checked_in?
-          |  Checked In
-        - else
-          |  Checked Out
-              
+
+tr
+  td = equipment.id
+  td = equipment.equipment_name
+  td = equipment.serial
+  td = equipment.created_at.strftime("%d %b %Y")
+  td
+    i.fa class=(equipment.checked_in? ? "fa-check-circle report-green" : "fa-exclamation-circle") aria-hidden="true"
+      - if equipment.checked_in?
+        |  Checked In
+      - else
+        |  Checked Out
+  td
+    - if equipment.image.present?
+      = image_tag equipment.image.url(:thumb), alt: "#{equipment.equipment_name} Thumbnail", class: 'equipment-thumbnail'
+    - else
+      | No Image
+      | &nbsp
+      i.fa-solid.fa-image
 style
   |
     .equipment-container {  display: flex; 
                             flex-direction: column; 
                             justify-content: center;
                             align-items: center;
-                            
                           }
     .shrink-h {height: 40px; padding: 0px; text-align: center }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    th, td {
+      padding: 2px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #423f3f;
+      color: white;
+    }
+
+    td {
+      background-color: #3e3c3c;
+    }
+
+    .equipment-thumbnail {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .equipment-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .shrink-h {
+      height: 40px;
+      padding: 0px;
+      text-align: center;
+    }
+    .report-green {color: #0dff00}

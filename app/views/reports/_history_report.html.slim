@@ -1,10 +1,16 @@
 - equipment = EquipmentInventory.find(record.equipment_inventory_id)
-- staff     = MaintenanceStaff.find(record.maintenance_staff_id)
+- staff = {}
+- staff = MaintenanceStaff.find(record.maintenance_staff_id) if record.maintenance_staff_id.present?
+
 tr
   td= equipment.id
   td= equipment.equipment_name
   td= equipment.serial
-  td #{staff.first_name} #{staff.last_name}
+  td
+    - if staff.present?
+     | #{staff.first_name} #{staff.last_name}
+    - else
+      | Employee Removed
   td= record.action
   td= record.moved_at.strftime("%d %b %Y %H:%M")
   
