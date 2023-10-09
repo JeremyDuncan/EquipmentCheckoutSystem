@@ -68,28 +68,46 @@ style
   - logout_path = Rails.application.routes.url_helpers.send("destroy_#{current_staff.class.name.underscore}_session_path")
   - role = ""
   - icon = ""
-  - role = "Human Resources Employee Roster" if hr_staff?
-  - role = "Maintenance Equipment Inventory" if maintenance?
-  - role = "Management Reports"              if management?
-  - icon = "fa-people-group" if hr_staff?
-  - icon = "fa-toolbox"      if maintenance?
-  - icon = "fa-file-alt"     if management?
+  - edit_path = ""
+
+  - if hr_staff?
+    - role = "Human Resources Employee Roster"
+    - icon = "fa-people-group"
+    - edit_path = edit_hr_staff_path(current_staff)
+  - elsif maintenance?
+    - role = "Maintenance Equipment Inventory"
+    - icon = "fa-toolbox"
+    - edit_path = edit_maintenance_staff_path(current_staff)
+  - elsif management?
+    - role = "Management Reports"
+    - icon = "fa-file-alt"
+    - edit_path = edit_management_staff_path(current_staff)
 
   header style="display: flex; justify-content: space-between; align-items: center; gap: 220px; padding-top: 0px;  padding-bottom: 10px;"
     h2 style="font-size: 1.4rem; padding-top: 15px; padding-bottom: 0px; margin: 0px"
+      | &nbsp
       i.fa-solid.fa-screwdriver-wrench
       | &nbsp
       | Equipment Checkout System (ECS)
 
-    nav.space-top-s
-      = button_to logout_path, method: :delete, class: 'nav-button logout-button', data: { turbolinks: false } do
-        i.fa.fa-sign-out-alt
-        | Logout
+    .div style="display: flex; gap: 5px; align-items: center"
+      nav.space-top-s
+        = button_to logout_path, method: :delete, class: 'nav-button logout-button', data: { turbolinks: false } do
+          i.fa.fa-sign-out-alt
+          | Logout
+
+      = link_to edit_path do
+        - if current_staff.image.present?
+          = image_tag current_staff.image.url(:thumb), alt: "#{current_staff.first_name} Thumbnail", class: 'avatar-image'
+        - else
+          i.fa-solid.fa-user style="padding-top: 8px; color: white"
+
   header_two style="display: flex; justify-content: center; align-items: center; "
     h2 style="margin: 0px"
       = role
       | &nbsp
       i class=" fa-solid #{icon}"
+
 
 - else
   header style="display: flex; justify-content: center;"
@@ -97,3 +115,7 @@ style
       | Welcome
 
 .space-bot-m
+
+style
+  |
+    .avatar-image {margin-top: 10px; border-radius: 50px; width: 70% }

@@ -1,8 +1,12 @@
+- title       =  maintenance? ? "Edit Your Profile"   : "Edit Maintenance Employee Profile"
+- button_text =  maintenance? ? "Update Your Profile" : "Update Maintenance Employee"
+- back_link   =  maintenance? ? "/" : "/maintenance_staffs"
+
 .container.col.no-pad
   #alert
 
 .container.col
-  h1.space-bot-xl Edit Maintenance Employee
+  h1.space-bot-xl #{title}
   i.fa-solid.fa-user-pen.space-bot-xl style="color: white; font-size: 7rem;"
   = form_with(model: @maintenance_staff, local: true, class: 'form-container') do |f|
     .form-group
@@ -12,15 +16,18 @@
     .form-group
       = f.label      :last_name, class: 'form-label'
       = f.text_field :last_name, class: 'form-input'
-    
+
+    .form-group
+      = f.label :image, 'Profile Image', class: 'form-label'
+      = f.file_field :image, class: 'form-input'
     .form-actions
       /## UPDATE BUTTON ## 
       button.btn.btn-primary type="submit"
         i.fa-solid.fa-plus
-        |  Update Maintenance Employee
+        | #{button_text}
   
   .navigation
     /## BACK BUTTON ##
-    = link_to '/maintenance_staffs', class: "btn btn-secondary" do
+    = link_to back_link, class: "btn btn-secondary" do
       i.fa-solid.fa-chevron-left
       |  Back  

@@ -43,7 +43,11 @@ class ManagementStaffsController < ApplicationController
   def update
     @management_staff = ManagementStaff.find(params[:id])
     if @management_staff.update(management_staff_params)
-      redirect_to management_staffs_path, notice: 'Management Employee was successfully updated.'
+      if management?
+        redirect_to "/", notice: 'Management Employee was successfully updated.'
+      else
+        redirect_to management_staffs_path, notice: 'Management Employee was successfully updated.'
+      end
     else
       flash.now[:alert] = @management_staff.errors.full_messages.join(", ")
       respond_to do |format|
@@ -68,7 +72,7 @@ class ManagementStaffsController < ApplicationController
 
   private
   def management_staff_params
-    params.require(:management_staff).permit(:first_name, :last_name, :role)
+    params.require(:management_staff).permit(:first_name, :last_name, :role, :image)
   end
 
 

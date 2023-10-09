@@ -2,14 +2,7 @@ class ReportsController < ApplicationController
   include ConsoleColors
   
   def index
-    start = params[:start].to_i
-    limit = params[:limit].to_i
-    @reports = Report.order(id: :desc).offset(start).limit(limit)
-  
-    respond_to do |format|
-      format.html # This will render the usual HTML view
-      format.json { render json: { reports: @reports.map { |r| r.attributes.merge({ full_name: ManagementStaff.find_by(id: r.management_staffs_id)&.full_name }) } } }
-    end
+    @reports = Report.order(id: :desc).limit(100)
   end
 
   def generate
