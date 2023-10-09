@@ -19,7 +19,28 @@ form#hiddenDeleteForm method="post" style="display:none;"
         th Date Created
         th Action
     tbody
-      
+      - @reports.each do |report|
+        - staff = {}
+        - if report.management_staffs_id?
+          - staff = ManagementStaff.find(report.management_staffs_id)
+        - staff_name = report.management_staffs_id? ? staff.full_name : "Employee Removed"
+
+        tr
+          td= report.id
+          td= report.report_type
+          td= report.management_staffs_id
+          td style="text-align: left"
+            - if staff.image.present?
+              = image_tag staff.image.url(:thumb), alt: "#{staff.first_name} Thumbnail", class: 'profile-image'
+            - else
+              i.fa-regular.fa-user.fa style=" font-size: 1.2rem;"
+            | &nbsp
+            =staff_name
+          td= report.created_at.strftime("%d %b %Y")
+          td
+            = link_to "View", report_path(report), class: 'view-button'
+            = link_to "Delete", report_path(report), method: :delete, data: { confirm: 'Are you sure?' }, class: 'delete-button'
+
   /## DASHBOARD BUTTON ##
   .space-bot-m
   = link_to '/', class: 'dashboard-button' do
@@ -64,55 +85,5 @@ javascript:
 
         $('.modal-close').on('click', function () {
             $('#deleteModal').hide();
-        });
-
-        let start = 0;
-        const limit = 50;
-        let isLoading = false;
-
-        function loadReports(start, limit) {
-            $.getJSON(`/reports?start=${start}&limit=${limit}`, function (data) {
-                if (data.reports.length === 0) {
-                    isLoading = false;
-                    return;
-                }
-
-                data.reports.forEach(function (report) {
-                    const row = `
-                      <tr>
-                          <td>${report.id}</td>
-                          <td>${report.report_type}</td>
-                          <td>${report.management_staffs_id}</td>
-                          <td>${report.full_name}</td>
-                          <td>${new Date(report.created_at).toLocaleDateString()}</td>
-                          <td>
-                              <a href="reports/${report.id}" class="view-button"><i class="fa-regular fa-id-card"></i> View</a>
-                              <a href="#" class="open-modal delete-button" data-url="reports/${report.id}"><i class="fa-solid fa-trash"></i> Delete</a>
-                          </td>
-                      </tr>
-                  `;
-                    $('tbody').append(row);
-                });
-
-                isLoading = false;
-            });
-        }
-
-        loadReports(start, limit);
-
-        $(window).on('scroll', function () {
-            if (isLoading) {
-                return;
-            }
-
-            const scrollTop = $(window).scrollTop();
-            const docHeight = $(document).height();
-            const winHeight = $(window).height();
-
-            if (scrollTop + winHeight >= docHeight) {
-                isLoading = true;
-                start += limit;
-                loadReports(start, limit);
-            }
         });
     });

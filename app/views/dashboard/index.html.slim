@@ -1,32 +1,32 @@
 .container.col
-  - if hr_staff?
-    h1 Human Resources Dashboard
-    i.fa.fa-user-tie.big
-  - elsif management?
-    h1 Management Dashboard
-    i.fa.fa-briefcase.big
-  - elsif maintenance?
-    h1 Maintenance Dashboard
-    i.fa.fa-toolbox.big
-  - else
+  - roles = { hr_staff: 'fa-user-tie', management: 'fa-briefcase', maintenance: 'fa-toolbox' }
+  - roles.each do |role, icon|
+    - if send("#{role}?")
+      h1 Welcome #{current_staff.first_name}!
+      - if current_staff.image.present?
+        = image_tag current_staff.image.url, alt: "#{current_staff.first_name}", class: 'profile-image'
+      - else
+        i.fa class="#{icon} big"
+
+  - if !current_staff.present?
     h1 Welcome Guest
 
   h2 Choose an Option
-  
+
   /## EQUIPMENT INVENTORY BUTTON ##
-  - if maintenance?  
+  - if maintenance?
     = link_to '/equipment_inventories', class: "btn" do
       i.fa.fa-toolbox
       |   Equipment Inventory
-      
+
+  /## HR STAFF BUTTON ##
   - if hr_staff?
-    /## HR STAFF BUTTON ##
     = link_to '/hr_staffs', class: "btn" do
       i.fa.fa-user-tie
       |  Employee Roster
 
-  -if management?
-    /## REPORTS BUTTON ##
+  /## REPORTS BUTTON ##
+  - if management?
     = link_to '/reports', class: "btn" do
       i.fa-solid.fa-file-lines
       |   Reports
@@ -53,3 +53,4 @@ style
       text-align: center;
       margin-bottom: 1em;
     }
+    .profile-image {height: 300px; border-radius: 8px}

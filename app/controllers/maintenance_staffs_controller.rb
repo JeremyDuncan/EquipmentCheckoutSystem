@@ -48,7 +48,11 @@ class MaintenanceStaffsController < ApplicationController
   def update
     @maintenance_staff = MaintenanceStaff.find(params[:id])
     if @maintenance_staff.update(maintenance_staff_params)
-      redirect_to maintenance_staffs_path, notice: 'Maintenance Employee was successfully updated.'
+      if maintenance?
+        redirect_to "/", notice: 'Maintenance Employee was successfully updated.'
+      else
+        redirect_to maintenance_staffs_path, notice: 'Maintenance Employee was successfully updated.'
+      end
     else
       flash.now[:alert] = @maintenance_staff.errors.full_messages.join(", ")
         respond_to do |format|
@@ -69,6 +73,6 @@ class MaintenanceStaffsController < ApplicationController
   
   private
   def maintenance_staff_params
-    params.require(:maintenance_staff).permit(:first_name, :last_name)
+    params.require(:maintenance_staff).permit(:first_name, :last_name, :image)
   end
 end

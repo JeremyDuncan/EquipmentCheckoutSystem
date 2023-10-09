@@ -129,7 +129,11 @@ class HrStaffsController < ApplicationController
   def update
     @hr_staff = HrStaff.find(params[:id])
     if @hr_staff.update(hr_staff_params)
-      redirect_to hr_staffs_path, notice: 'HR Employee was successfully updated.'
+      if hr_staff?
+        redirect_to "/", notice: 'HR Employee was successfully updated.'
+      else
+        redirect_to hr_staffs_path, notice: 'HR Employee was successfully updated.'
+      end
     else
       flash.now[:alert] = @hr_staff.errors.full_messages.join(", ")
         respond_to do |format|
@@ -154,7 +158,7 @@ class HrStaffsController < ApplicationController
   
   private
   def hr_staff_params
-    params.require(:hr_staff).permit(:first_name, :last_name, :role)
+    params.require(:hr_staff).permit(:first_name, :last_name, :role, :image)
   end
   
   

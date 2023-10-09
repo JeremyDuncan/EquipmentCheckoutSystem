@@ -1,8 +1,12 @@
+- title       =  management? ? "Edit Your Profile"   : "Edit Management Employee Profile"
+- button_text =  management? ? "Update Your Profile" : "Update Management Employee"
+- back_link   =  management? ? "/" : "/management_staffs"
+
 .container.col.no-pad
   #alert
 
 .container.col
-  h1.space-bot-xl Edit Management Employee
+  h1.space-bot-xl #{title}
   i.fa-solid.fa-user-pen.space-bot-xl style="color: white; font-size: 7rem;"
   = form_with(model: @management_staff, local: true, class: 'form-container') do |f|
     .form-group
@@ -13,14 +17,17 @@
       = f.label      :last_name, class: 'form-label'
       = f.text_field :last_name, class: 'form-input'
 
+    .form-group
+      = f.label :image, 'Profile Image', class: 'form-label'
+      = f.file_field :image, class: 'form-input'
     .form-actions
       /## UPDATE BUTTON ##
       button.btn.btn-primary type="submit"
         i.fa-solid.fa-plus
-        |  Update Management Employee
+        |  #{button_text}
 
   .navigation
     /## BACK BUTTON ##
-    = link_to '/management_staffs', class: "btn btn-secondary" do
+    = link_to back_link, class: "btn btn-secondary" do
       i.fa-solid.fa-chevron-left
       |  Back

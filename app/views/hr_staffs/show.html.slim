@@ -1,9 +1,12 @@
 - staff = @hr_staff
-.container.col 
-  h1.space-bot-xxl HR Staff Details
+.container.col.no-pad
+  h1.space-bot-m HR Staff Details
   
   /## ICON ##
-  i.fa-regular.fa-id-card.fa-2xl.space-bot-xxl style="color: white; font-size: 7rem;"
+  - if staff.image.present?
+    = image_tag staff.image.url, alt: "#{staff.first_name}", class: 'profile-image space-bot-m'
+  - else
+    i.fa-regular.fa-id-card.fa-2xl.space-bot-xxl style="color: white; font-size: 7rem; margin-top: 80px"
   
   div.fake-table
     div.fake-table-row.fake-table-header
@@ -13,14 +16,18 @@
     div.fake-table-row.fake-table-body
       div.fake-table-cell = staff.first_name
       div.fake-table-cell = staff.last_name
-      
-  .container
+  br
+  .container.no-pad
     /## EDIT BUTTON ##
     = link_to "/hr_staffs/#{staff.id}/edit", class: 'btn' do
       i.fa-solid.fa-user-pen
       |  Edit
-      
+
     /## BACK BUTTON ##
     = link_to '/hr_staffs', class: "btn" do
       i.fa-solid.fa-chevron-left
-      |  Back  
+      |  Back
+
+style
+  |
+    .profile-image {height: 300px; border-radius: 8px}
