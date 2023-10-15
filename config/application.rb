@@ -13,6 +13,7 @@ module EquipmentCheckoutSystem
     config.load_defaults 7.0
     config.autoload_paths << Rails.root.join('lib')
     config.hosts << "ecs.jeremyduncan.synology.me"
+    config.hosts << "www.equipmentcheckoutsystem.jeremyd.net"
     config.hosts << /.*\.?jeremyd\.net\z/
 
 
