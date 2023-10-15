@@ -1,37 +1,46 @@
 .container.col.no-pad
-  h1.space-bot-xl Create HR Account
-  i.fa-solid.fa-user.space-bot-xl style="font-size: 7rem;"
+  h1.space-bot-xl
+    i.fa-solid.fa-user style="font-size: 3rem;"
+    | &nbsp Create HR Account
 
-  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-container' }) do |f|
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-container', multipart: true }) do |f|
     = render "hr_staffs/shared/error_messages", resource: resource
-    
-    .form-group
-      = f.label :first_name, class: 'form-label'
-      br
-      = f.text_field :first_name, autofocus: true, class: 'form-input'
+    .form-group-row
+      .form-group.half-width
+        = f.label :first_name, class: 'form-label'
+        br
+        = f.text_field :first_name, autofocus: true, class: 'form-input'
+      .form-group.half-width
+        = f.label :last_name, class: 'form-label'
+        br
+        = f.text_field :last_name, autofocus: true, class: 'form-input'
 
-    .form-group
-      = f.label :last_name, class: 'form-label'
-      br
-      = f.text_field :last_name, autofocus: true, class: 'form-input'
-      
     .form-group
       = f.label :email, class: 'form-label'
       br
       = f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-input'
-    
+
     .form-group
       = f.label :password, class: 'form-label'
       - if @minimum_password_length
         em = "(#{@minimum_password_length} characters minimum)"
       br
       = f.password_field :password, autocomplete: "new-password", class: 'form-input'
-    
     .form-group
       = f.label :password_confirmation, class: 'form-label'
       br
       = f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-input'
-    
+
+    .form-group
+      = f.label :image, 'Profile Picture (Optional)', class: 'form-label'
+      br
+      label.custom-file-upload
+        input.form-input-file type="file" name="hr_staff[image]" id="hr_staff_image"
+        | Upload Photo
+      br
+      img#image-preview style="max-width: 200px; display: none;"
+
+
     .form-actions
       = f.submit 'Sign up', class: 'btn btn-primary'
 
@@ -40,4 +49,69 @@
     = link_to '/new_user_session', class: "btn btn-secondary" do
       i.fa-solid.fa-chevron-left
       |  Back
+  br
+  br
+  br
 
+
+
+style
+  |
+    .form-group-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .half-width {
+      width: 48%;
+    }
+    .form-input-file {
+      display: inline-block;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #333;
+      color: #fff;
+      border-radius: 4px;
+      border: 1px solid #333;
+      text-align: center;
+      width: auto;
+      margin-top: 10px;
+    }
+
+    .form-input-file:hover {
+      background-color: #555;
+    }
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #333;
+      color: #fff;
+      border-radius: 4px;
+      border: 1px solid #333;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .custom-file-upload:hover {
+      background-color: #555;
+    }
+
+    .form-input-file {
+      display: none;  /* Hide the default input */
+    }
+    #image-preview {border-radius: 50%; margin-top: 15px; box-shadow: 0px 0px 20px 1px #2e2d2d;}
+
+javascript:
+    $(document).ready(function () {
+        $('#hr_staff_image').on('change', function () {
+            const input = this;
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image-preview').attr('src', e.target.result).show();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        });
+    });
