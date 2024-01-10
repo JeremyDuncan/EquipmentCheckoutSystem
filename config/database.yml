@@ -7,15 +7,15 @@
 #  adapter: postgresql
 #  encoding: unicode
 #  pool: <%#= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#  
+
 #development:
 #  <<: *default
 #  database: EquipmentCheckoutSystem_development
-#  
+
 #test:
 #  <<: *default
 #  database: EquipmentCheckoutSystem_test
-#  
+
 #production:
 #  <<: *default
 #  database: EquipmentCheckoutSystem_production
@@ -26,33 +26,58 @@
 
 
 
-################################################################################
-## UNCOMMENT TO DEPLOY TO DOCKER ##
-###################################  
+
+
+
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  url: <%= ENV['DATABASE_URL'] %>
-  
-test:
-  <<: *default
-  database: EquipmentCheckoutSystem_test
-  
-production:
-  <<: *default
-  database: EquipmentCheckoutSystem_production
-  username: postgres  # Changed to match the default PostgreSQL username
-  password: <%= ENV["POSTGRES_PASSWORD"] %>  # Changed to match the environment variable
-  host: db  # This should match the service name in docker-compose.yml
-  port: 5432  # Default PostgreSQL port
+  username: <%= ENV.fetch("DB_USERNAME", Rails.application.credentials.dig(:database, :username)) %>
+  password: <%= ENV.fetch("DB_PASSWORD", Rails.application.credentials.dig(:database, :password)) %>
+  host: localhost
 
 development:
   <<: *default
+  database: EquipmentCheckoutSystem_development
+
+test:
+  <<: *default
+  database: EquipmentCheckoutSystem_test
+
+production:
+  <<: *default
   database: EquipmentCheckoutSystem_production
-  username: postgres  # Changed to match the default PostgreSQL username
-  password: <%= ENV["POSTGRES_PASSWORD"] %>  # Changed to match the environment variable
-  host: db  # This should match the service name in docker-compose.yml
-  port: 5432  # Default PostgreSQL port
+  password: <%= ENV.fetch("DB_PASSWORD", Rails.application.credentials.dig(:database, :password)) %>
+
+
+################################################################################
+## UNCOMMENT TO DEPLOY TO DOCKER ##
+###################################  
+#default: &default
+#  adapter: postgresql
+#  encoding: unicode
+#  # For details on connection pooling, see Rails configuration guide
+#  # https://guides.rubyonrails.org/configuring.html#database-pooling
+#  pool: <%#= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#  url: <%#= ENV['DATABASE_URL'] %>
+#
+#test:
+#  <<: *default
+#  database: EquipmentCheckoutSystem_test
+#
+#production:
+#  <<: *default
+#  database: EquipmentCheckoutSystem_production
+#  username: postgres  # Changed to match the default PostgreSQL username
+#  password: <%#= ENV["POSTGRES_PASSWORD"] %>  # Changed to match the environment variable
+#  host: db  # This should match the service name in docker-compose.yml
+#  port: 5432  # Default PostgreSQL port
+
+#development:
+#  <<: *default
+#  database: EquipmentCheckoutSystem_production
+#  username: postgres  # Changed to match the default PostgreSQL username
+#  password: <%#= ENV["POSTGRES_PASSWORD"] %>  # Changed to match the environment variable
+#  host: db  # This should match the service name in docker-compose.yml
+#  port: 5432  # Default PostgreSQL port
